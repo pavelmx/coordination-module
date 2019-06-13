@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="sq_leave" author="oadmin">
+        <createSequence sequenceName="sq_leave"  incrementBy="10" startValue="1000"
+                        minValue="1000"/>
+    </changeSet>
+
+    <changeSet id="sq_customer" author="oadmin">
+        <createSequence sequenceName="sq_customer"  incrementBy="10" startValue="1000"
+                        minValue="1000"/>
+    </changeSet>
+
+    <changeSet id="sq_project" author="oadmin">
+        <createSequence sequenceName="sq_project" incrementBy="10" startValue="1000"
+                        minValue="1000"/>
+    </changeSet>
+
+    <changeSet id="sq_report" author="oadmin">
+        <createSequence sequenceName="sq_report"  incrementBy="10" startValue="1000"
+                        minValue="1000"/>
+    </changeSet>
+
+    <changeSet id="sq_project_employee" author="oadmin">
+        <createSequence sequenceName="sq_project_employee"  incrementBy="10" startValue="1000"
+                        minValue="1000"/>
+    </changeSet>
+
+    <changeSet id="sq_project_customer" author="oadmin">
+        <createSequence sequenceName="sq_project_customer"  incrementBy="10" startValue="1000"
+                        minValue="1000"/>
+    </changeSet>
+
+
+</databaseChangeLog>

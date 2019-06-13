@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+
+
+    <changeSet id="insert_to_position" author="oadmin">
+        <insert tableName="position">
+            <column name="id" value="1" />
+            <column name="name" value="Java junior developer"/>
+            <column name="is_active" value="true"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_to_personal_info" author="oadmin">
+        <insert tableName="personal_info">
+            <column name="id" value="1" />
+            <column name="first_name" value="pavel"/>
+            <column name="last_name" value="marchuk"/>
+            <column name="adress" value="Vitebsk, Moskovski avenue 70/2"/>
+            <column name="email" value="pavel@email"/>
+            <column name="skype" value="pavelskype"/>
+            <column name="phone_number" value="+375333447219"></column>
+            <column name="description" />
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_to_employee" author="oadmin" >
+        <insert tableName="employee">
+            <column name="id" value="1" />
+            <column name="is_active" value="true"/>
+            <column name="personal_info_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_to_department" author="oadmin">
+        <insert tableName="department">
+            <column name="id" value="1" />
+            <column name="name" value="Department of Java"/>
+            <column name="manager_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_to_position_employee" author="oadmin">
+        <insert tableName="position_employee">
+            <column name="id" value="1" />
+            <column name="employee_id" value="1"/>
+            <column name="position_id" value="1"/>
+            <column name="start_date_for_position" value="2019-05-06"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_to_department_employee" author="oadmin">
+        <insert tableName="department_employee">
+            <column name="id" value="1" />
+            <column name="employee_id" value="1"/>
+            <column name="department_id" value="1"/>
+            <column name="is_current_department" value="true"/>
+            <column name="start_date_in_department" value="2019-05-05"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_to_hiring_employee_info" author="oadmin">
+        <insert tableName="hiring_employee_info">
+            <column name="id" value="1"/>
+            <column name="employee_id" value="1"/>
+            <column name="date_of_hiring" value="2019-05-05"/>
+            <column name="date_of_dismissal" />
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>
