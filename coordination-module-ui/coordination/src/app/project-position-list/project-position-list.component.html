@@ -1,0 +1,66 @@
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Id
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.firstName" (sort)="onSort($event)">Name
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.firstName', 'caret-up':order=='asc' && column=='personalInfo.firstName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">EmployeeId
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.skype" (sort)="onSort($event)">Position
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.skype', 'caret-up':order=='asc' && column=='personalInfo.skype'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.email" (sort)="onSort($event)">Rate
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.email', 'caret-up':order=='asc' && column=='personalInfo.email'}">
+        </span>
+      </th>
+      <!-- <th scope="col" class="sortable" sortable="personalInfo.phoneNumber" (sort)="onSort($event)">Start date
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.phoneNumber', 'caret-up':order=='asc' && column=='personalInfo.phoneNumber'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">End date
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
+        </span>
+      </th> -->
+      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Planned start date (real start date)
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Planned end date (real end date)
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
+        </span>
+      </th>
+      <!-- <th scope="col">Operations</th> -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let projectPosition of list">
+      <th>{{projectPosition.id}}</th>
+      <td>{{projectPosition.project.name}}</td>
+      <td>{{projectPosition.projectPositionEmployee.employeeId}}</td>      
+      <td>{{projectPosition.projectPositionEmployee.position}}</td>  
+      <td>{{projectPosition.projectPositionEmployee.rate}}</td>  
+ <!-- <td>{{projectPosition.startDate}}</td>
+      <td>projectPosition.endDate}}</td> -->
+      <td>{{projectPosition.plannedStartDate}} ({{projectPosition.startDate}})</td>
+      <td>{{projectPosition.plannedEndDate}} ({{projectPosition.endDate}})</td>            
+    </tr>
+  </tbody>
+</table>

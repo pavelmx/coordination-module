@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Table
+@Table(name = "project")
 public class Project extends AbstractEntity{
 
     @Id
@@ -23,12 +23,22 @@ public class Project extends AbstractEntity{
 
     private String name;
 
+    private String code;
+
     private String model;
+
+    private LocalDate plannedStartDate;
+
+    private LocalDate plannedEndDate;
 
     private LocalDate startDate;
 
     private LocalDate endDate;
 
     private int hoursForProject;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
 }

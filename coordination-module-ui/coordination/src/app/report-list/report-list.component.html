@@ -1,0 +1,68 @@
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Id
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.firstName" (sort)="onSort($event)">Report date
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.firstName', 'caret-up':order=='asc' && column=='personalInfo.firstName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Project name
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Project code
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">EmployeeId
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Task
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Description task
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Report type
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Hours for task
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+        </span>
+      </th>
+      
+      <!-- <th scope="col">Operations</th> -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let report of list">
+      <th>{{report.id}}</th>
+      <td>{{report.reportDate}}</td>
+      <td>{{report.project.name}}</td>
+      <td>{{report.project.code}}</td>
+      <td>{{report.employee_id}}</td>
+      <th>{{report.task}}</th>
+      <td>{{report.descriptionTask}}</td>
+      <td>{{report.reportType}}</td>
+      <th>{{report.hoursForTask}}</th>
+      
+    </tr>
+  </tbody>
+</table>

@@ -33,6 +33,7 @@ public class Report extends AbstractEntity{
 
     private Float hoursForTask;
 
-    private LocalDate dateExecuteTask;
+    private LocalDate reportDate;
 
+    private ReportType reportType;
 }

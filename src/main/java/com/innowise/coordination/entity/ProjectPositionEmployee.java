@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -13,18 +14,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table
-public class ProjectCustomer extends AbstractEntity{
+public class ProjectPositionEmployee extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator", schema = "coordination_schema", sequenceName = "sq_project_customer")
+    @SequenceGenerator(name = "sequenceGenerator", schema = "coordination_schema", sequenceName = "sq_project_position_employee")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private Project project;
+    @Column(name = "employee_id")
+    private Long employeeId;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private String position;
+
+    private Float rate;
 }

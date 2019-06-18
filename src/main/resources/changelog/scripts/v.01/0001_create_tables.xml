@@ -14,9 +14,10 @@
             <column name="project_id" type="bigint"></column>
             <column name="employee_id" type="bigint"></column>
             <column name="task" type="varchar(255)"></column>
-            <column name="descriptionTask" type="varchar(255)"></column>
-            <column name="hoursForTask" type="float"></column>
-            <column name="dateExecuteTask" type="date"></column>
+            <column name="description_task" type="varchar(255)"></column>
+            <column name="hours_for_task" type="float"></column>
+            <column name="report_date" type="date"></column>
+            <column name="report_type" type="int"></column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
@@ -29,9 +30,13 @@
             </column>
             <column name="model" type="varchar(255)"></column>
             <column name="name" type="varchar(255)"></column>
-            <column name="hoursForProject" type="int"></column>
-            <column name="startDate" type="date"></column>
-            <column name="endDate" type="date"></column>
+            <column name="code" type="varchar(255)"></column>
+            <column name="hours_for_project" type="int"></column>
+            <column name="planned_start_date" type="date"></column>
+            <column name="planned_end_date" type="date"></column>
+            <column name="start_date" type="date"></column>
+            <column name="end_date" type="date"></column>
+            <column name="customer_id" type="bigint"></column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
@@ -42,51 +47,38 @@
             <column name="id" type="bigint" defaultValueSequenceNext="sq_customer">
                 <constraints primaryKey="true" primaryKeyName="pk_customer_id" nullable="false"/>
             </column>
-            <column name="location" type="varchar(255)"></column>
+            <column name="code" type="varchar(255)"></column>
             <column name="name" type="varchar(255)"></column>
-            <column name="contacts" type="varchar(255)"></column>
+            <column name="contact" type="varchar(255)"></column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
     </changeSet>
 
-    <changeSet id="create_table_leave" author="oadmin">
-        <createTable tableName="leave">
-            <column name="id" type="bigint" defaultValueSequenceNext="sq_leave">
-                <constraints primaryKey="true" primaryKeyName="pk_leave_id" nullable="false"/>
+    <changeSet id="create_table_project_position_employee" author="oadmin">
+        <createTable tableName="project_position_employee">
+            <column name="id" type="bigint" defaultValueSequenceNext="sq_project_position_employee">
+                <constraints primaryKey="true" primaryKeyName="pk_project_position_employee_id" nullable="false"/>
             </column>
             <column name="employee_id" type="bigint"></column>
-            <column name="cause" type="varchar(255)"></column>
-            <column name="startLeave" type="date"></column>
-            <column name="endLeave" type="date"></column>
-            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
-            <column name="updated" type="timestamp"></column>
-        </createTable>
-    </changeSet>
-
-    <changeSet id="create_table_project_employee" author="oadmin">
-        <createTable tableName="project_employee">
-            <column name="id" type="bigint" defaultValueSequenceNext="sq_project_employee">
-                <constraints primaryKey="true" primaryKeyName="pk_project_employee_id" nullable="false"/>
-            </column>
-            <column name="employee_id" type="bigint"></column>
-            <column name="project_id" type="bigint"></column>
             <column name="position" type="varchar(255)"></column>
             <column name="rate" type="varchar(255)"></column>
-            <column name="startOnProject" type="date"></column>
-            <column name="endOnProject" type="date"></column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
     </changeSet>
 
-    <changeSet id="create_table_project_customer" author="oadmin">
-        <createTable tableName="project_customer">
-            <column name="id" type="bigint" defaultValueSequenceNext="sq_project_customer">
-                <constraints primaryKey="true" primaryKeyName="pk_project_customer_id" nullable="false"/>
+    <changeSet id="create_table_project_position" author="oadmin">
+        <createTable tableName="project_position">
+            <column name="id" type="bigint" defaultValueSequenceNext="sq_project_position">
+                <constraints primaryKey="true" primaryKeyName="pk_project_position_id" nullable="false"/>
             </column>
-            <column name="customer_id" type="bigint"></column>
+            <column name="project_position_employee_id" type="bigint"></column>
             <column name="project_id" type="bigint"></column>
+            <column name="planned_start_date" type="date"></column>
+            <column name="planned_end_date" type="date"></column>
+            <column name="start_date" type="date"></column>
+            <column name="end_date" type="date"></column>
             <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"></column>
             <column name="updated" type="timestamp"></column>
         </createTable>
@@ -96,8 +88,8 @@
     <changeSet id="add_foreign_key_constraints" author="oadmin">
 
         <addForeignKeyConstraint
-                constraintName="fk_project_customer_project"
-                baseTableName="project_customer"
+                constraintName="fk_project_position_project"
+                baseTableName="project_position"
                 baseColumnNames="project_id"
                 referencedTableName="project"
                 referencedColumnNames="id"
@@ -105,19 +97,10 @@
                 onUpdate="CASCADE"/>
 
         <addForeignKeyConstraint
-                constraintName="fk_project_customer_customer"
-                baseTableName="project_customer"
-                baseColumnNames="customer_id"
-                referencedTableName="customer"
-                referencedColumnNames="id"
-                onDelete="SET NULL"
-                onUpdate="CASCADE"/>
-
-        <addForeignKeyConstraint
-                constraintName="fk_project_employee_project"
-                baseTableName="project_employee"
-                baseColumnNames="project_id"
-                referencedTableName="project"
+                constraintName="fk_project_position_project_position_employee"
+                baseTableName="project_position"
+                baseColumnNames="project_position_employee_id"
+                referencedTableName="project_position_employee"
                 referencedColumnNames="id"
                 onDelete="SET NULL"
                 onUpdate="CASCADE"/>
@@ -127,6 +110,15 @@
                 baseTableName="report"
                 baseColumnNames="project_id"
                 referencedTableName="project"
+                referencedColumnNames="id"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_project_customer"
+                baseTableName="project"
+                baseColumnNames="customer_id"
+                referencedTableName="customer"
                 referencedColumnNames="id"
                 onDelete="SET NULL"
                 onUpdate="CASCADE"/>

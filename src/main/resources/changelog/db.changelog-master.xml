@@ -9,6 +9,6 @@
 
     <include file="changelog/scripts/v.01/0000_create_sequences.xml"/>
     <include file="changelog/scripts/v.01/0001_create_tables.xml"/>
-<!--    <include file="changelog/scripts/v.01/0002_insert_data.xml"/>-->
+    <include file="changelog/scripts/v.01/0002_insert_data.xml"/>
 
 </databaseChangeLog>

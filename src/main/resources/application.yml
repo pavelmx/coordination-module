@@ -5,10 +5,11 @@ spring:
   jpa:
     properties:
       hibernate:
+        show-sql: true
         temp:
           use_jdbc_metadata_defaults: false
         ddl-auto: update
-    database-platform: org.hibernate.dialect.PostgreSQL9Dialect
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
 
   datasource:
     driverClassName: org.postgresql.Driver

@@ -5,10 +5,6 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
-    <changeSet id="sq_leave" author="oadmin">
-        <createSequence sequenceName="sq_leave"  incrementBy="10" startValue="1000"
-                        minValue="1000"/>
-    </changeSet>
 
     <changeSet id="sq_customer" author="oadmin">
         <createSequence sequenceName="sq_customer"  incrementBy="10" startValue="1000"
@@ -25,13 +21,13 @@
                         minValue="1000"/>
     </changeSet>
 
-    <changeSet id="sq_project_employee" author="oadmin">
-        <createSequence sequenceName="sq_project_employee"  incrementBy="10" startValue="1000"
+    <changeSet id="sq_project_position_employee" author="oadmin">
+        <createSequence sequenceName="sq_project_position_employee"  incrementBy="10" startValue="1000"
                         minValue="1000"/>
     </changeSet>
 
-    <changeSet id="sq_project_customer" author="oadmin">
-        <createSequence sequenceName="sq_project_customer"  incrementBy="10" startValue="1000"
+    <changeSet id="sq_project_position" author="oadmin">
+        <createSequence sequenceName="sq_project_position"  incrementBy="10" startValue="1000"
                         minValue="1000"/>
     </changeSet>
 

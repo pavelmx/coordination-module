@@ -1,0 +1,39 @@
+
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Id
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.firstName" (sort)="onSort($event)">Name
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.firstName', 'caret-up':order=='asc' && column=='personalInfo.firstName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Contact
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+        </span>
+      </th>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Code
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+        </span>
+      </th>
+      
+      <!-- <th scope="col">Operations</th> -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let customer of list">
+      <th>{{customer.id}}</th>
+      <td>{{customer.name}}</td>
+      <td>{{customer.contact}}</td>
+      <td>{{customer.code}}</td>
+     
+      
+    </tr>
+  </tbody>
+</table>

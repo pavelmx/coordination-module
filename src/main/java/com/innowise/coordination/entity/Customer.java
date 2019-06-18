@@ -22,7 +22,7 @@ public class Customer extends  AbstractEntity{
 
     private String name;
 
-    private String location;
+    private String contact;
 
-    private String contacts;
+    private String code;
 }

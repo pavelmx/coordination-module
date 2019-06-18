@@ -14,26 +14,26 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table
-public class ProjectEmployee extends AbstractEntity{
+public class ProjectPosition extends AbstractEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator", schema = "coordination_schema", sequenceName = "sq_project_employee")
+    @SequenceGenerator(name = "sequenceGenerator", schema = "coordination_schema", sequenceName = "sq_project_position")
     private Long id;
-
-    private Long employee_id;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
 
-    private String position;
+    @ManyToOne
+    @JoinColumn(name = "project_position_employee_id")
+    private ProjectPositionEmployee projectPositionEmployee;
 
-    private String rate;
+    private LocalDate plannedStartDate;
 
-    private LocalDate startOnProject;
+    private LocalDate plannedEndDate;
 
-    private LocalDate endOnProject;
+    private LocalDate startDate;
 
-
+    private LocalDate endDate;
 }
