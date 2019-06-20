@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Table
-public class ProjectPosition extends AbstractEntity{
+public class ProjectPosition extends AbstractEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")

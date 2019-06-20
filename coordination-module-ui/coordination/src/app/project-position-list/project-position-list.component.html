@@ -1,5 +1,8 @@
+<div>
+  <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addModal">Create </button>
+</div>
 
-<table class="table table-striped">
+<table class="table table-striped mt-5">
   <thead>
     <tr>
       <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Id
@@ -37,30 +40,133 @@
           [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
         </span>
       </th> -->
-      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Planned start date (real start date)
+      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Planned period
         <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Planned end date (real end date)
+      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Actual period
         <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
         </span>
       </th>
-      <!-- <th scope="col">Operations</th> -->
+      <th scope="col">Status</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let projectPosition of list">
       <th>{{projectPosition.id}}</th>
       <td>{{projectPosition.project.name}}</td>
-      <td>{{projectPosition.projectPositionEmployee.employeeId}}</td>      
-      <td>{{projectPosition.projectPositionEmployee.position}}</td>  
-      <td>{{projectPosition.projectPositionEmployee.rate}}</td>  
- <!-- <td>{{projectPosition.startDate}}</td>
-      <td>projectPosition.endDate}}</td> -->
-      <td>{{projectPosition.plannedStartDate}} ({{projectPosition.startDate}})</td>
-      <td>{{projectPosition.plannedEndDate}} ({{projectPosition.endDate}})</td>            
+      <td>{{projectPosition.projectPositionEmployee.employeeId}}</td>
+      <td>{{projectPosition.projectPositionEmployee.position}}</td>
+      <td>{{projectPosition.projectPositionEmployee.rate}}</td>
+      <td>{{projectPosition.plannedStartDate}} -- {{projectPosition.plannedEndDate}}</td>
+      <td *ngIf="!projectPosition.endDate && projectPosition.startDate">{{projectPosition.startDate}} -- (now)</td>
+      <td *ngIf="projectPosition.endDate || !projectPosition.startDate && !projectPosition.endDate">
+        {{projectPosition.startDate}} -- {{projectPosition.endDate}}</td>
+      <td>
+        <div *ngIf="!projectPosition.project.startDate">
+            <h4 >
+                <span class="badge badge-warning">Project not running</span></h4>
+        </div>
+        <div *ngIf="projectPosition.project.startDate">
+            
+              <h4 *ngIf="projectPosition.endDate && projectPosition.startDate">
+                <span class="badge badge-danger">Finished</span></h4>
+              <h4 *ngIf="!projectPosition.endDate && !projectPosition.startDate">
+                <span class="badge badge-info">Not started</span></h4>
+              <h4 *ngIf="!projectPosition.endDate && projectPosition.startDate">
+                <span class="badge badge-success">Working</span></h4>
+          </div>
+        
+      </td>
+      <td *ngIf="projectPosition.project.startDate">
+        <button *ngIf="!projectPosition.startDate && !projectPosition.endDate" class="btn btn-outline-primary"
+          (click)="startProjectPosition(projectPosition.id)">Start</button>
+        <button *ngIf="projectPosition.startDate && !projectPosition.endDate" class="btn btn-outline-danger"
+          (click)="endProjectPosition(projectPosition.id)">Finish</button>
+      </td>
     </tr>
   </tbody>
 </table>
+
+
+<!-- add modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Assign to project</h5>
+        <button type="button" class="close" data-dismiss="modal" (click)="f.resetForm()" aria-label="Close" #close_add>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #f="ngForm">
+          <div class="form-group">
+            <div class="row">
+              <div class="col ">
+                <label>Choose project</label>
+                <select required class="custom-select" name="project" [(ngModel)]="projectPosition.project"
+                  #project="ngModel">
+                  <option *ngFor="let p of projectList" [ngValue]="p">{{p.name}}
+                  </option>
+                </select>
+              </div>
+              <div class="col-4 d-flex align-content-end flex-wrap">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" routerLink="/project-list"
+                  data-toggle="modal" data-target="#addModal">Create project</button>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <label>Choose employee</label>
+            <select required class="custom-select" name="employeeId" [(ngModel)]="projectPositionEmployee.employeeId"
+              #employeeId="ngModel">
+              <option *ngFor="let emp of activeEmployeeList" [ngValue]="emp.id">
+                {{emp.personalInfo.firstName}} {{emp.personalInfo.lastName}}
+              </option>
+            </select>
+          </div>
+
+
+          <div class="form-group">
+            <input required type="text" class="form-control" placeholder="Position" name="position"
+              [(ngModel)]="projectPositionEmployee.position" #position="ngModel"
+              [ngClass]="{'is-valid':position.valid && position.touched,'is-invalid':position.invalid && position.touched}">
+          </div>
+          <div class="form-group">
+            <input required type="text" class="form-control" placeholder="Rate" name="rate"
+              [(ngModel)]="projectPositionEmployee.rate" #rate="ngModel"
+              [ngClass]="{'is-valid':rate.valid && rate.touched,'is-invalid':rate.invalid && rate.touched}">
+          </div>
+
+          <div class="form-group">
+            <label>Planned period for project work</label>
+            <div class="row">
+              <div class="col">
+                <input required type="date" class="form-control" placeholder="Planned start date"
+                  name="plannedStartDate" [(ngModel)]="projectPosition.plannedStartDate" #plannedStartDate="ngModel"
+                  [ngClass]="{'is-valid':plannedStartDate.valid && plannedStartDate.touched,'is-invalid':plannedStartDate.invalid && plannedStartDate.touched}">
+              </div>
+              <div class="col">
+                <input required type="date" class="form-control" placeholder="Planned end date" name="plannedEndDate"
+                  [(ngModel)]="projectPosition.plannedEndDate" #plannedEndDate="ngModel"
+                  [ngClass]="{'is-valid':plannedEndDate.valid && plannedEndDate.touched,'is-invalid':plannedEndDate.invalid && plannedEndDate.touched}">
+              </div>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="f.resetForm()">Close</button>
+        <button type="button" class="btn btn-primary" [disabled]="f.form.invalid"
+          (click)="createProjectPosition(f)">Create</button>
+      </div>
+    </div>
+  </div>
+</div>

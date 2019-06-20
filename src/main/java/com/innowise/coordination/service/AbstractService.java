@@ -3,6 +3,10 @@ package com.innowise.coordination.service;
 import com.innowise.coordination.entity.AbstractEntity;
 import com.innowise.coordination.repository.AbstractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 
 import java.util.List;
@@ -26,6 +30,12 @@ implements  CommonService<E>{
     @Override
     public List<E> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Page<E> getPage(int page, int size, String order, String column){
+        Pageable pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
+        return repository.findAll(pageable);
     }
 
     @Override

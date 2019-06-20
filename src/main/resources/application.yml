@@ -1,14 +1,17 @@
-server:
-  port: 8088
+spring:
+  profiles:
+    active: dev
+
+---
 
 spring:
+  profiles: dev
   jpa:
     properties:
       hibernate:
-        show-sql: true
         temp:
           use_jdbc_metadata_defaults: false
-        ddl-auto: update
+        ddl-auto: none
         dialect: org.hibernate.dialect.PostgreSQL9Dialect
 
   datasource:
@@ -16,6 +19,41 @@ spring:
     url: jdbc:postgresql://localhost:5432/mydb?currentSchema=coordination_schema
     username: myuser
     password: 123
+    initialization-mode: always
 
   liquibase:
     change-log: classpath:changelog/db.changelog-master.xml
+
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: test
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        default_schema: coordination_schema_test
+        temp:
+          use_jdbc_metadata_defaults: false
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/mydb
+    username: myuser
+    password: 123
+
+  liquibase:
+    change-log: classpath:changelog/db.changelog-master.xml
+
+
+
+
+
+
+
+

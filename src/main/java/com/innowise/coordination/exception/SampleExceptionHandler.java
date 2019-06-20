@@ -1,4 +1,4 @@
-package com.innowise.coordination.util.exception;
+package com.innowise.coordination.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @MappedSuperclass
-public abstract class AbstractEntity implements Serializable {
+public abstract class AbstractEntity<L> implements BaseEntity<L> {
 
     @CreationTimestamp
     private LocalDateTime created;
@@ -22,4 +22,7 @@ public abstract class AbstractEntity implements Serializable {
     @UpdateTimestamp
     private LocalDateTime updated;
 
+
 }
+
+

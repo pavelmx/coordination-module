@@ -1,4 +1,4 @@
-package com.innowise.coordination.util.exception;
+package com.innowise.coordination.exception;
 
 public class SampleException extends RuntimeException{
 
