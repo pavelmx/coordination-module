@@ -111,7 +111,6 @@ liquibase {
 			username 'myuser'
 			password '123'
 		}
-        runList='main, test'
 	}
-
+	runList='main, test'
 }

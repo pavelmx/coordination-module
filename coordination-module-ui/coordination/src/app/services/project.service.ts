@@ -40,4 +40,8 @@ export class ProjectService {
   createProject(project: Project): Observable<Project>{
     return this.http.post<Project>(this.url, project);
   }
+
+  getAllActive() : Observable<Project[]>{
+    return this.http.get<Project[]>(this.url + "active");
+  }
 }

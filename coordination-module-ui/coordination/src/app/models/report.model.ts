@@ -7,7 +7,7 @@ export class Report {
     employeeId: number;
     hoursForTask: number;
     task: string;
-    descriptiontask: string;
+    descriptionTask: string;
     reportDate: Date;
-    reportType: number;
+    reportType: string;
   }

@@ -28,6 +28,11 @@ public class ProjectController extends AbstractController<Project, ProjectServic
         return ResponseEntity.ok(service.getAllByCustomerId(id));
     }
 
+    @GetMapping("/active")
+    public ResponseEntity<List<Project>> getAllActive() {
+        return ResponseEntity.ok(service.getAllActive());
+    }
+
     @GetMapping("/start")
     public ResponseEntity<Response> setStartProjectById(@RequestParam Long id) {
         return ResponseEntity.ok(new Response(service.setStartProjectById(id)));

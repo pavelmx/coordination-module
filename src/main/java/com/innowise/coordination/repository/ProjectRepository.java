@@ -9,4 +9,6 @@ import java.util.List;
 public interface ProjectRepository extends AbstractRepository<Project, Long> {
 
     List<Project> findByCustomerId(Long id);
+
+    List<Project> findByStartDateNotNull();
 }

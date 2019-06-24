@@ -16,14 +16,14 @@ insert into coordination_schema.project_position (id, project_id, project_positi
 values (2, 1, 2, '2019-06-30', '2019-11-01', null, null) on conflict do nothing;
 
 insert into coordination_schema.report (id, project_id, employee_id, hours_for_task, description_task, task, report_date, report_type)
-values (1, 1, 1, 5, null, 'develop authorization', '2019-05-29', 3) on conflict do nothing;
+values (1, 1, 1, 5, null, 'develop authorization', '2019-05-29', 2) on conflict do nothing;
 insert into coordination_schema.report (id, project_id, employee_id, hours_for_task, description_task, task, report_date, report_type)
-values (2, 1, 1, 3, 'boring', 'writing tests for authorization', '2019-05-29', 3) on conflict do nothing;
+values (2, 1, 1, 3, 'boring', 'writing tests for authorization', '2019-05-29', 2) on conflict do nothing;
 insert into coordination_schema.report (id, project_id, employee_id, hours_for_task, description_task, task, report_date, report_type)
-values (3, 1, 1, 1, null, 'develop reset password', '2019-05-30', 3) on conflict do nothing;
+values (3, 1, 1, 1, null, 'develop reset password', '2019-05-30', 2) on conflict do nothing;
 insert into coordination_schema.report (id, project_id, employee_id, hours_for_task, description_task, task, report_date, report_type)
-values (4, 1, 1, 2, null, 'develop sending mail to confirm account and change password', '2019-05-30', 3) on conflict do nothing;
+values (4, 1, 1, 2, null, 'develop sending mail to confirm account and change password', '2019-05-30', 2) on conflict do nothing;
 insert into coordination_schema.report (id, project_id, employee_id, hours_for_task, description_task, task, report_date, report_type)
-values (5, 1, 1, 2, null, 'develop ui for login and register', '2019-05-30', 3) on conflict do nothing;
+values (5, 1, 1, 2, null, 'develop ui for login and register', '2019-05-30', 2) on conflict do nothing;
 insert into coordination_schema.report (id, project_id, employee_id, hours_for_task, description_task, task, report_date, report_type)
-values (6, 1, 1, 3, 'boring', 'testing ui', '2019-05-30', 3) on conflict do nothing;
+values (6, 1, 1, 3, 'boring', 'testing ui', '2019-05-30', 1) on conflict do nothing;

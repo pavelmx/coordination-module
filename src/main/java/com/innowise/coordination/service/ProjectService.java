@@ -41,4 +41,7 @@ public class ProjectService extends AbstractService<Project, ProjectRepository> 
     }
 
 
+    public List<Project> getAllActive() {
+        return repository.findByStartDateNotNull();
+    }
 }

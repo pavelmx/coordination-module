@@ -33,7 +33,7 @@ export class ProjectPositionService {
     return this.http.get(this.employeeUrl + "active");
   }
 
-  getEmployee(id: number){
+  getEmployeeById(id: string){
     return this.http.get(this.employeeUrl + id);
   }
 

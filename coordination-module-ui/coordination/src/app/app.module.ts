@@ -16,6 +16,7 @@ import { ReportService } from './services/report.service';
 import { ReportListComponent } from './report-list/report-list.component';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,    
@@ -34,7 +35,7 @@ import { ReportListComponent } from './report-list/report-list.component';
     FormsModule,
     HttpClientModule,
     ToastrModule.forRoot({ timeOut: 5000, positionClass: 'toast-top-right'}),
-  
+    
   ],
   providers: [
     CookieService,

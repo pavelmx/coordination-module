@@ -15,7 +15,6 @@ export class ReportService {
     ) {
   }
  
-
   getById(id: number){
     return this.http.get(this.url + "?id=" + id );
   }
@@ -23,4 +22,9 @@ export class ReportService {
   getAll() : Observable<Report[]>{
     return this.http.get<Report[]>(this.url + "all");
   }
+
+  add(body: Report): Observable<Report>{
+    return this.http.post<Report>(this.url, body);
+  }
+  
 }

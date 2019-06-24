@@ -1,13 +1,70 @@
+<div class="d-flex justify-content-center">
+  <button class="btn btn-outline-primary mb-3 " data-toggle="collapse" href="#filter">Filter</button>
+</div>
 
-<table class="table table-striped">
+<div class="collapse" id="filter">
+  <div class="card card-body">
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label>Reporting between dates</label>
+          <div class="row">
+            <div class="col">
+              <input (input)="saveFilter()" min="{{list[0].reportDate}}" max="{{list[list.length-1].reportDate}}"
+                type="date" class="form-control" placeholder="(empty)" name="firstDate" [(ngModel)]="filter.firstDate"
+                #firstDate="ngModel">
+            </div>
+            <div class="col">
+              <input [disabled]="!filter.firstDate" (input)="saveFilter()" type="date" class="form-control"
+                placeholder="(empty)" name="lastDate" min="{{filter.firstDate}}"
+                max="{{list[list.length-1].reportDate}}" [(ngModel)]="filter.lastDate" #lastDate="ngModel">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-group">
+          <label>Last name</label>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<table class="table mt-5 table-sm" contenteditable="true">
   <thead>
     <tr>
-      <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Id
+      <th scope="col">Employee</th>
+      <th scope="col">Days on sick leave</th>
+      <th scope="col">Days on vacation</th>
+      <th scope="col">Paid hours</th>
+      <th scope="col">Worked hours</th>
+      <th scope="col">Working hours in month</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>{{statistics.employee}}</td>
+      <td>{{statistics.daysOnSickLeave}}</td>
+      <td>{{statistics.daysOnVacation}}</td>
+      <td>{{statistics.paidHours}}</td>
+      <td>{{statistics.workedHours}}</td>
+      <td>{{statistics.workingHoursInMonth}}</td>
+    </tr>
+  </tbody>
+</table>
+
+<table id="table" class="table mt-5 table-sm table-striped table-bordered" contenteditable="true">
+  <thead>
+    <tr>
+      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Type
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.firstName" (sort)="onSort($event)">Report date
+      <th scope="col" class="sortable" sortable="personalInfo.firstName" (sort)="onSort($event)">Date
         <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.firstName', 'caret-up':order=='asc' && column=='personalInfo.firstName'}">
         </span>
@@ -17,16 +74,11 @@
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Project code
+      <!-- <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">EmployeeId
         <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
         </span>
-      </th>
-      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">EmployeeId
-        <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
-        </span>
-      </th>
+      </th> -->
       <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Task
         <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
@@ -37,32 +89,53 @@
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Report type
-        <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
-        </span>
-      </th>
+
       <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Hours for task
         <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
         </span>
       </th>
-      
+
       <!-- <th scope="col">Operations</th> -->
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let report of list">
-      <th>{{report.id}}</th>
+      <td>{{report.reportType}}</td>
       <td>{{report.reportDate}}</td>
       <td>{{report.project.name}}</td>
-      <td>{{report.project.code}}</td>
-      <td>{{report.employee_id}}</td>
-      <th>{{report.task}}</th>
+      <!-- <td>{{report.employee_id}}</td> -->
+      <td>{{report.task}}</td>
       <td>{{report.descriptionTask}}</td>
-      <td>{{report.reportType}}</td>
-      <th>{{report.hoursForTask}}</th>
-      
+      <td>{{report.hoursForTask}}</td>
+    </tr>
+    <tr *ngIf="add">
+      <td>
+        <select required name="type" [(ngModel)]="newReport.reportType" #reportType="ngModel">
+          <option value="0">SICK_LEAVE</option>
+          <option value="2">WORK</option>
+          <option value="1">VACATION</option>
+        </select>
+      </td>
+      <td>
+          <input type="date"  placeholder="(empty)" name="reportDate" 
+          [(ngModel)]="newReport.reportDate" #reportDate="ngModel" style="width: 140px">
+      </td>
+      <td>
+        <select required name="project" [(ngModel)]="newReport.project" #project="ngModel">
+          <option *ngFor="let p of projectList" [ngValue]="p">{{p.name}}
+          </option>
+        </select>
+      </td>
+      <td>  </td>
+      <td>  </td>
+      <td>  </td>
     </tr>
   </tbody>
 </table>
+<div class="d-flex justify-content-center">
+  <button class="btn btn-outline-primary" *ngIf="!add" (click)="add=true">+</button>
+  <button class="btn btn-primary mr-5" *ngIf="add" (click)="add=false"
+   (click)="getValuesFromCells()">Add</button>
+  <button class="btn btn-secondary" *ngIf="add" (click)="add=false">Cancel</button>
+</div>
