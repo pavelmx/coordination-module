@@ -1,116 +1,20 @@
-import groovy.sql.Sql
+apply plugin: "idea"
 
-buildscript {
+subprojects {
+	apply plugin: "java"
+
+	tasks.withType(JavaCompile) {
+		sourceCompatibility = JavaVersion.VERSION_1_8
+		targetCompatibility = JavaVersion.VERSION_1_8
+	}
+
 	repositories {
-		mavenLocal()
 		mavenCentral()
 	}
-	dependencies {
-		classpath 'org.liquibase:liquibase-gradle-plugin:2.0.1'
-	}
-}
-
-plugins {
-	id 'org.springframework.boot' version '2.1.5.RELEASE'
-	id 'java'
-	id "org.liquibase.gradle" version "2.0.1"
-}
-
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'liquibase'
 
 
-group = 'com.innowise'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-repositories {
-	mavenCentral()
-}
-
-configurations {
-	jdbc
-}
-
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
-	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
-	compile 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
-//	implementation 'org.liquibase:liquibase-core'
-	compile 'org.postgresql:postgresql'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	runtime 'com.h2database:h2'
-	compile 'io.springfox:springfox-swagger2:2.9.2'
-	compile 'io.springfox:springfox-swagger-ui:2.9.2'
-
-	jdbc 'org.postgresql:postgresql:42.2.5'
-	liquibaseRuntime 'org.postgresql:postgresql:9.4.1211.jre7'
-	liquibaseRuntime 'org.liquibase:liquibase-core:3.6.3'
-	liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.0.1'
-	liquibaseRuntime 'ch.qos.logback:logback-core:1.2.3'
-	liquibaseRuntime 'ch.qos.logback:logback-classic:1.2.3'
 }
 
 
-def props = [user: 'myuser', password: '123'] as Properties
-def urldb = "jdbc:postgresql://localhost:5432/mydb"
-def driver = 'org.postgresql.Driver'
-def sql = Sql.newInstance(urldb, props, driver)
-def sqlClassLoader = Sql.classLoader
-configurations.jdbc.each { sqlClassLoader.addURL it.toURI().toURL() }
 
 
-task dropSchemes{
-	doLast {
-		String sqlString = 'DROP SCHEMA coordination_schema CASCADE'
-		sql.execute(sqlString)
-        String sqlStringTest = 'DROP SCHEMA coordination_schema_test CASCADE'
-        sql.execute(sqlStringTest)
-	}
-}
-
-task createSchemes{
-	doLast {
-		String sqlString = 'CREATE SCHEMA coordination_schema '
-		sql.execute(sqlString)
-		String sqlStringTest = 'CREATE SCHEMA coordination_schema_test '
-		sql.execute(sqlStringTest)
-	}
-}
-
-task insertData {
-	doLast {
-		String sqlString = file('src/main/resources/insert_data.sql').text
-		println(sqlString)
-		sql.execute(sqlString)
-	}
-}
-
-task deleteData {
-	doLast {
-		String sqlString = file('src/main/resources/delete_data.sql').text
-		println(sqlString)
-		sql.execute(sqlString)
-	}
-}
-
-def changeLog = "$projectDir/src/main/resources/changelog/db.changelog-master.xml"
-liquibase {
-	activities {
-		main {
-			changeLogFile changeLog
-			url 'jdbc:postgresql://localhost:5432/mydb?currentSchema=coordination_schema'
-			username 'myuser'
-			password '123'
-		}
-		test{
-			changeLogFile changeLog
-			url 'jdbc:postgresql://localhost:5432/mydb?currentSchema=coordination_schema_test'
-			username 'myuser'
-			password '123'
-		}
-	}
-	runList='main, test'
-}

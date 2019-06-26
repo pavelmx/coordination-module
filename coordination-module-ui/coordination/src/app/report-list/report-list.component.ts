@@ -7,6 +7,7 @@ import { ProjectService } from '../services/project.service';
 import { Project } from '../models/project.model';
 import { ProjectPositionService } from '../services/project-position.service';
 import { CookieService } from 'ngx-cookie-service';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-report-list',
@@ -20,9 +21,10 @@ export class ReportListComponent implements OnInit {
   newReport: Report = new Report();
   filter: any = {}
   statistics: any = {}
-  //  {workedHours: number, paidHours:number, daysOnVacation: number,
-  //    daysOnSickLeave: number, employee: string, workingHoursInMonth: number};
-
+  reportBody: Report = new Report();
+  isAdd: boolean = true;
+  today: string;
+  employeeList;
 
   constructor(
     private reportService: ReportService,
@@ -33,8 +35,59 @@ export class ReportListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.initFilter();
     this.initReportList();
     this.initProjectList();
+    this.initEmployeeList();
+  }
+
+  initFilter(){
+    console.log("init filter")
+    this.filter.firstName = this.storage.getFirstName();
+    this.filter.lastName = this.storage.getLastName();
+    this.filter.adress = this.storage.getAdress();
+    this.filter.phoneNumber = this.storage.getPhoneNumber();
+    this.filter.skype = this.storage.getSkype();
+    this.filter.email = this.storage.getEmail();
+    this.filter.description = this.storage.getDescription();
+    this.filter.active = this.storage.getActive();
+    this.filter.departmentId = this.storage.getDepartment();
+    this.filter.positionId = this.storage.getPosition();
+  
+  }
+
+  resetFilter(){
+    this.storage.init();
+    this.initFilter();
+    this.initReportList();
+  }
+
+  saveFilter(){    
+    this.storage.setFirstName(this.filter.firstName);
+    this.storage.setLastName(this.filter.lastName);
+    this.storage.setAdress(this.filter.adress);
+    this.storage.setPhoneNumber(this.filter.phoneNumber);
+    this.storage.setSkype(this.filter.skype);
+    this.storage.setEmail(this.filter.email);
+    this.storage.setDescription(this.filter.description);
+    this.storage.setActive(this.filter.active);
+    this.storage.setDepartment(this.filter.departmentId);
+    this.storage.setPosition(this.filter.positionId);
+    console.log(this.storage.getPosition())  
+    this.initReportList();
+  }
+
+  initEmployeeList(){
+    this.projectPositionService.getActiveEmployees()
+      .subscribe(
+        response => {
+          this.employeeList = response;
+          console.log(response);
+        },
+        error => {
+          console.log(error);
+        }
+      );
   }
 
   initProjectList() {
@@ -51,21 +104,37 @@ export class ReportListComponent implements OnInit {
   }
 
   initReportList() {
-    this.reportService.getAll()
-      .subscribe(
-        response => {
-          this.list = response;
-          console.log(response);
-          this.getStatistics()
-        },
-        error => {
-          console.log(error);
-        }
-      );
+    if (!this.filter.employee) {
+      this.reportService.getAll()
+        .subscribe(
+          response => {
+            this.list = response;
+            console.log(response);
+            this.getStatistics()
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    } else if (this.filter.employee) {
+      this.reportService.getAllByEmployeeId(this.filter.employee)
+        .subscribe(
+          response => {
+            this.list = response;
+            console.log(response);
+            this.getStatistics()
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    }
   }
 
   getEmployeeById() {
-    this.projectPositionService.getEmployeeById(this.cookieService.get('employeeId'))
+    var id = this.cookieService.get('employeeId'); //for users
+    // var id = this.filter.employee.id; //for admin
+    this.projectPositionService.getEmployeeById(id)
       .subscribe(
         response => {
           console.log(response)
@@ -78,12 +147,21 @@ export class ReportListComponent implements OnInit {
   }
 
   getStatistics() {
-    this.getEmployeeById();
-    var paidHours = 15;
-    var workedHours = 0;
+    if (this.filter.employee) {
+      this.getEmployeeById();
+      var paidHours = '15';
+      var workingHoursInMonth = '168';
+      var workedHours = 0;
+    } else if(!this.filter.employee){
+      this.statistics.employee = 'all employees';
+      var paidHours = '--';
+      var workingHoursInMonth = '--';
+      var workedHours = 0;
+    }
+
     var daysOnVacation = 0;
     var daysOnSickLeave = 0;
-    var workingHoursInMonth = 168;
+
     for (var i = 0; i < this.list.length; i++) {
       if (this.list[i].reportType == 'WORK') {
         workedHours += this.list[i].hoursForTask;
@@ -99,38 +177,49 @@ export class ReportListComponent implements OnInit {
     this.statistics.workingHoursInMonth = workingHoursInMonth;
     this.statistics.daysOnSickLeave = daysOnSickLeave;
     this.statistics.paidHours = paidHours;
-
     this.statistics.daysOnVacation = daysOnVacation;
   }
 
-
-  addReport() {
-    console.log(this.newReport)
-    this.reportService.add(this.newReport)
-      .subscribe(
-        response => {
-          console.log(response)
-          this.initReportList()
-        },
-        error => {
-          console.log(error)
-        }
-      );
+  getCurrentReport(report: Report) {
+    this.isAdd = false;
+    this.reportBody = report;
   }
 
-  getValuesFromCells() {
-    var table: HTMLTableElement = <HTMLTableElement>document.getElementById("table");
-    var rows = table.rows.length;
-    var columns = table.rows[0].cells.length;
-    var task = table.rows[rows - 1].cells[columns - 3].innerHTML;
-    this.newReport.task = task;
-    console.log(task + "=" + this.newReport.task)
-    var descriptionTask = table.rows[rows - 1].cells[columns - 2].innerHTML;
-    this.newReport.descriptionTask = descriptionTask;
-    console.log(descriptionTask + "=" + this.newReport.descriptionTask)
-    var hoursForTask = table.rows[rows - 1].cells[columns - 1].innerHTML;
-    this.newReport.hoursForTask = parseFloat(hoursForTask);
-    console.log(hoursForTask + "=" + this.newReport.hoursForTask)
-    this.addReport()
+  clearAddForm() {
+    this.reportBody = new Report();
+    this.isAdd = true;
+  }
+
+  compareFn(x: any, y: any): boolean {
+    return x && y ? x == y : x == y;
+  }
+
+  compareFnId(x: any, y: any): boolean {
+    return x && y ? x.id == y.id : x == y;
+  }
+
+  addEdit(form: NgForm) {
+    var method = '';
+    if (this.isAdd) {
+      method = 'POST';
+    } else {
+      method = 'PUT';
+    }
+    var emp_id = this.cookieService.get('employeeId')
+    this.reportBody.employeeId = emp_id;
+    this.reportService.addEdit(this.reportBody, method)
+      .subscribe(
+        response => {
+          console.log(response);
+          this.getStatistics()
+          form.resetForm();
+          this.initReportList()
+          this.toast.showSuccess('Success', 'Report updated success')
+        },
+        error => {
+          console.log(error);
+          this.toast.showSuccess('Error', error.error.message)
+        }
+      );
   }
 }

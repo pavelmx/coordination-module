@@ -4,7 +4,7 @@ export class Report {
   
     id: number;
     project: Project;
-    employeeId: number;
+    employeeId: string;
     hoursForTask: number;
     task: string;
     descriptionTask: string;

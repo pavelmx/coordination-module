@@ -4,3 +4,5 @@ pluginManagement {
 	}
 }
 rootProject.name = 'coordination'
+
+include 'coordination-main', 'coordination-database'

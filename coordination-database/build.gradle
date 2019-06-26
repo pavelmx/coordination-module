@@ -1,0 +1,87 @@
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.liquibase:liquibase-gradle-plugin:2.0.1'
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.1.5.RELEASE'
+    id "org.liquibase.gradle" version "2.0.1"
+}
+
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'liquibase'
+
+
+group = 'com.innowise'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+}
+
+
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    liquibaseRuntime 'org.postgresql:postgresql:9.4.1211.jre7'
+    liquibaseRuntime 'org.liquibase:liquibase-core:3.6.3'
+    liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:2.0.1'
+    liquibaseRuntime 'ch.qos.logback:logback-core:1.2.3'
+    liquibaseRuntime 'ch.qos.logback:logback-classic:1.2.3'
+}
+
+
+
+task insertData(type: JavaExec) {
+    group = "Liquibase"
+    classpath configurations.liquibaseRuntime
+    main = "liquibase.integration.commandline.Main"
+    args "--changeLogFile=src/main/resources/changelog/scripts/v.01/insert_data.sql"
+    args "--username=myuser"
+    args "--password=123"
+    args "--url=jdbc:postgresql://localhost:5432/mydb"
+    args "--defaultSchemaName=coordination_schema"
+    args "--driver=org.postgresql.Driver"
+    args "update"
+}
+
+task deleteData(type: JavaExec) {
+    group = "Liquibase"
+    classpath configurations.liquibaseRuntime
+    main = "liquibase.integration.commandline.Main"
+    args "--changeLogFile=src/main/resources/changelog/scripts/v.01/delete_data.sql"
+    args "--username=myuser"
+    args "--password=123"
+    args "--url=jdbc:postgresql://localhost:5432/mydb"
+    args "--defaultSchemaName=coordination_schema"
+    args "--driver=org.postgresql.Driver"
+    args "update"
+}
+
+
+def changeLog = "$projectDir/src/main/resources/changelog/db.changelog-master.xml"
+liquibase {
+    activities {
+        main {
+            changeLogFile changeLog
+            url 'jdbc:postgresql://localhost:5432/mydb?currentSchema=coordination_schema'
+            username 'myuser'
+            password '123'
+        }
+        test{
+            changeLogFile changeLog
+            url 'jdbc:postgresql://localhost:5432/mydb?currentSchema=coordination_schema_test'
+            username 'myuser'
+            password '123'
+        }
+    }
+    runList="$item"
+}
