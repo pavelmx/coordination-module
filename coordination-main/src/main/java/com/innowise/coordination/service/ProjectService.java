@@ -1,6 +1,7 @@
 package com.innowise.coordination.service;
 
 import com.innowise.coordination.entity.Project;
+import com.innowise.coordination.entity.QProject;
 import com.innowise.coordination.repository.ProjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class ProjectService extends AbstractService<Project, ProjectRepository> {
+public class ProjectService extends AbstractService<Project, ProjectRepository, QProject> {
 
     @Autowired
     private ProjectRepository repository;

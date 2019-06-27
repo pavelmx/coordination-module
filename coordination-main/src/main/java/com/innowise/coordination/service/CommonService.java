@@ -1,5 +1,6 @@
 package com.innowise.coordination.service;
 
+import com.querydsl.core.types.dsl.EntityPathBase;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

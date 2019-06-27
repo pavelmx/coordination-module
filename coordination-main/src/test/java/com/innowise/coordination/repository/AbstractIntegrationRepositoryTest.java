@@ -2,6 +2,7 @@ package com.innowise.coordination.repository;
 
 import com.innowise.coordination.CoordinationApplication;
 import com.innowise.coordination.entity.AbstractEntity;
+import com.querydsl.core.types.dsl.EntityPathBase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,8 +19,9 @@ import java.time.format.DateTimeFormatter;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = CoordinationApplication.class)
 @ActiveProfiles("test")
-public abstract class AbstractIntegrationRepositoryTest<E extends AbstractEntity<L>, R extends AbstractRepository<E, L>, L>
-        extends CommonIntegrationRepositoryTest<E, R, L> {
+@Transactional
+public abstract class AbstractIntegrationRepositoryTest<E extends AbstractEntity<L>, R extends AbstractRepository<E, L, Q>, L, Q extends EntityPathBase<E>>
+        extends CommonIntegrationRepositoryTest<E, R, L, Q> {
 
     @Autowired
     private R repository;

@@ -2,6 +2,7 @@ package com.innowise.coordination.service;
 
 import com.innowise.coordination.entity.ProjectPosition;
 import com.innowise.coordination.entity.ProjectPositionEmployee;
+import com.innowise.coordination.entity.QProjectPosition;
 import com.innowise.coordination.repository.ProjectPositionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProjectPositionService extends AbstractService<ProjectPosition, ProjectPositionRepository>{
+public class ProjectPositionService extends AbstractService<ProjectPosition, ProjectPositionRepository, QProjectPosition>{
 
     @Autowired
     private ProjectPositionRepository repository;
@@ -29,7 +30,7 @@ public class ProjectPositionService extends AbstractService<ProjectPosition, Pro
 
     @Override
     public Optional<ProjectPosition> save(ProjectPosition entity) {
-        ProjectPositionEmployee projectPositionEmployee = projectPositionEmployeeService.save(entity.getProjectPositionEmployee()).get();
+        ProjectPositionEmployee projectPositionEmployee = (ProjectPositionEmployee) projectPositionEmployeeService.save(entity.getProjectPositionEmployee()).get();
         entity.setProjectPositionEmployee(projectPositionEmployee);
         return Optional.of(repository.save(entity));
     }

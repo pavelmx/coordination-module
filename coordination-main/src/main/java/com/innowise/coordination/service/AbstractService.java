@@ -2,6 +2,7 @@ package com.innowise.coordination.service;
 
 import com.innowise.coordination.entity.AbstractEntity;
 import com.innowise.coordination.repository.AbstractRepository;
+import com.querydsl.core.types.dsl.EntityPathBase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +13,7 @@ import org.springframework.data.domain.Sort;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class AbstractService<E extends AbstractEntity, R extends AbstractRepository<E, Long>>
+public abstract class AbstractService<E extends AbstractEntity, R extends AbstractRepository<E, Long, Q>, Q extends EntityPathBase<E>>
 implements  CommonService<E>{
 
     private final R repository;

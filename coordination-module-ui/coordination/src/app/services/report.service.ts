@@ -23,6 +23,10 @@ export class ReportService {
     return this.http.get<Report[]>(this.url + "all");
   }
 
+  getAllFilter(filter): Observable<Report[]> {
+    return this.http.post<Report[]>(this.url + "filter", filter);
+  }
+
   getAllByEmployeeId(employee): Observable<Report[]> {
     return this.http.get<Report[]>(this.url + "employee?employee_id=" + employee.id);  
   }

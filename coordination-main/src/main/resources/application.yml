@@ -1,0 +1,41 @@
+spring:
+  profiles:
+    active: dev
+
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: dev
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        ddl-auto: none
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
+
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/mydb?currentSchema=coordination_schema
+    username: myuser
+    password: 123
+
+---
+
+spring:
+  profiles: test
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false
+        ddl-auto: none
+        dialect: org.hibernate.dialect.PostgreSQL9Dialect
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/mydb?currentSchema=coordination_schema_test
+    username: myuser
+    password: 123

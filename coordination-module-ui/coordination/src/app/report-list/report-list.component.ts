@@ -8,6 +8,7 @@ import { Project } from '../models/project.model';
 import { ProjectPositionService } from '../services/project-position.service';
 import { CookieService } from 'ngx-cookie-service';
 import { NgForm } from '@angular/forms';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-report-list',
@@ -32,6 +33,7 @@ export class ReportListComponent implements OnInit {
     private projectPositionService: ProjectPositionService,
     private cookieService: CookieService,
     private toast: ToastService,
+    private storage: StorageService
   ) { }
 
   ngOnInit() {
@@ -43,17 +45,14 @@ export class ReportListComponent implements OnInit {
 
   initFilter(){
     console.log("init filter")
-    this.filter.firstName = this.storage.getFirstName();
-    this.filter.lastName = this.storage.getLastName();
-    this.filter.adress = this.storage.getAdress();
-    this.filter.phoneNumber = this.storage.getPhoneNumber();
-    this.filter.skype = this.storage.getSkype();
-    this.filter.email = this.storage.getEmail();
-    this.filter.description = this.storage.getDescription();
-    this.filter.active = this.storage.getActive();
-    this.filter.departmentId = this.storage.getDepartment();
-    this.filter.positionId = this.storage.getPosition();
-  
+    this.filter.descriptionTask = this.storage.getDescriptionTask();
+    this.filter.employeeId = this.storage.getEmployeeId();
+    this.filter.firstDate = this.storage.getFirstDate();
+    this.filter.hoursForTask = this.storage.getHoursForTask();
+    this.filter.lastDate = this.storage.getLastDate();
+    this.filter.task = this.storage.getTask();
+    this.filter.reportType = this.storage.getReportType();
+    this.filter.projectId = this.storage.getProjectId();  
   }
 
   resetFilter(){
@@ -63,17 +62,15 @@ export class ReportListComponent implements OnInit {
   }
 
   saveFilter(){    
-    this.storage.setFirstName(this.filter.firstName);
-    this.storage.setLastName(this.filter.lastName);
-    this.storage.setAdress(this.filter.adress);
-    this.storage.setPhoneNumber(this.filter.phoneNumber);
-    this.storage.setSkype(this.filter.skype);
-    this.storage.setEmail(this.filter.email);
-    this.storage.setDescription(this.filter.description);
-    this.storage.setActive(this.filter.active);
-    this.storage.setDepartment(this.filter.departmentId);
-    this.storage.setPosition(this.filter.positionId);
-    console.log(this.storage.getPosition())  
+    this.storage.setDescriptionTask(this.filter.descriptionTask);
+    this.storage.setEmployeeId(this.filter.employeeId);
+    this.storage.setFirstDate(this.filter.firstDate);
+    this.storage.setHoursForTask(this.filter.hoursForTask);
+    this.storage.setLastDate(this.filter.lastDate);
+    this.storage.setTask(this.filter.task);
+    this.storage.setReportType(this.filter.reportType);
+    this.storage.setProjectId(this.filter.projectId);    
+    console.log(this.filter)
     this.initReportList();
   }
 
@@ -104,8 +101,8 @@ export class ReportListComponent implements OnInit {
   }
 
   initReportList() {
-    if (!this.filter.employee) {
-      this.reportService.getAll()
+    console.log(this.filter) 
+      this.reportService.getAllFilter(this.filter)
         .subscribe(
           response => {
             this.list = response;
@@ -116,19 +113,19 @@ export class ReportListComponent implements OnInit {
             console.log(error);
           }
         );
-    } else if (this.filter.employee) {
-      this.reportService.getAllByEmployeeId(this.filter.employee)
-        .subscribe(
-          response => {
-            this.list = response;
-            console.log(response);
-            this.getStatistics()
-          },
-          error => {
-            console.log(error);
-          }
-        );
-    }
+    // } else if (this.filter.employee) {
+    //   this.reportService.getAllByEmployeeId(this.filter.employee)
+    //     .subscribe(
+    //       response => {
+    //         this.list = response;
+    //         console.log(response);
+    //         this.getStatistics()
+    //       },
+    //       error => {
+    //         console.log(error);
+    //       }
+    //     );
+    // }
   }
 
   getEmployeeById() {

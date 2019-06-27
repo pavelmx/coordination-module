@@ -8,35 +8,35 @@
       <div class="col">
         <div class="form-group">
           <label>Employee</label>
-          <select class="custom-select" name="employee" [(ngModel)]="filter.employee" #employee="ngModel">
+          <select (change)="saveFilter()" class="custom-select" name="employeeId" [(ngModel)]="filter.employeeId" #employeeId="ngModel">
             <option value="">(empty)</option>
-            <option *ngFor="let emp of employeeList" [ngValue]='emp'>
+            <option *ngFor="let emp of employeeList" [ngValue]='emp.id'>
               {{emp.personalInfo.firstName}} {{emp.personalInfo.lastName}}</option>
           </select>
         </div>
       </div>
       <div class="col">
-          <div class="form-group">
-              <label>Project</label>
-              <select class="custom-select" name="projectf" [(ngModel)]="filter.projectf" #projectf="ngModel">
-                <option value="">(empty)</option>
-                <option *ngFor="let pr of projectList" [ngValue]='pr'>{{pr.name}}</option>
-              </select>
-            </div>
+        <div class="form-group">
+          <label>Project</label>
+          <select (change)="saveFilter()" class="custom-select" name="projectId" [(ngModel)]="filter.projectId" #projectId="ngModel">
+            <option value="">(empty)</option>
+            <option *ngFor="let pr of projectList" [ngValue]='pr.id'>{{pr.name}}</option>
+          </select>
+        </div>
       </div>
-    <!-- </div>
+      <!-- </div>
     <div class="row"> -->
       <div class="col">
         <div class="form-group">
           <label>Reporting between dates</label>
           <div class="row">
             <div *ngIf="list" class="col">
-              <input min="{{list[0].reportDate}}" max="{{list[list.length-1].reportDate}}" type="date"
+              <input (input)="saveFilter()" min="{{list[0].reportDate}}" max="{{list[list.length-1].reportDate}}" type="date"
                 class="form-control" placeholder="(empty)" name="firstDate" [(ngModel)]="filter.firstDate"
                 #firstDate="ngModel">
             </div>
             <div *ngIf="list" class="col">
-              <input [disabled]="!filter.firstDate" type="date" class="form-control" placeholder="(empty)"
+              <input (input)="saveFilter()" [disabled]="!filter.firstDate" type="date" class="form-control" placeholder="(empty)"
                 name="lastDate" min="{{filter.firstDate}}" max="{{list[list.length-1].reportDate}}"
                 [(ngModel)]="filter.lastDate" #lastDate="ngModel">
             </div>
@@ -48,15 +48,32 @@
           <label>Choose type of report</label><br>
           <div class="btn-group" role="group" aria-label="...">
             <button class="btn btn-outline-primary mb-3 " (click)="filter.reportType=''"
-              [ngClass]="{'active':filter.reportType==''}">ALL</button>
+              [ngClass]="{'active':filter.reportType==''}" (click)="saveFilter()">ALL</button>
             <button class="btn btn-outline-primary mb-3 " (click)="filter.reportType='WORK'"
-              [ngClass]="{'active':filter.reportType=='WORK'}">WORK</button>
+              [ngClass]="{'active':filter.reportType=='WORK'}" (click)="saveFilter()">WORK</button>
             <button class="btn btn-outline-primary mb-3 " (click)="filter.reportType='VACATION'"
-              [ngClass]="{'active':filter.reportType=='VACATION'}">VACATION</button>
+              [ngClass]="{'active':filter.reportType=='VACATION'}" (click)="saveFilter()">VACATION</button>
             <button class="btn btn-outline-primary mb-3 " (click)="filter.reportType='SICK_LEAVE'"
-              [ngClass]="{'active':filter.reportType=='SICK_LEAVE'}">SICK_LEAVE</button>
+              [ngClass]="{'active':filter.reportType=='SICK_LEAVE'}" (click)="saveFilter()">SICK_LEAVE</button>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+          <label>Task</label>
+        <input type="text" class="form-control" placeholder="(empty)" name="task" [(ngModel)]="filter.task"
+          #task="ngModel" (input)="saveFilter()">
+      </div>
+      <div class="col">
+          <label>Description task</label>
+        <input type="text" class="form-control" placeholder="(empty)" name="descriptionTask"
+          [(ngModel)]="filter.descriptionTask" #descriptionTask="ngModel" (input)="saveFilter()">
+      </div>
+      <div class="col">
+          <label>Hours for task</label>
+        <input type="text" class="form-control" placeholder="(empty)" name="hoursForTask"
+          [(ngModel)]="filter.hoursForTask" #hoursForTask="ngModel" (input)="saveFilter()">
       </div>
     </div>
   </div>
