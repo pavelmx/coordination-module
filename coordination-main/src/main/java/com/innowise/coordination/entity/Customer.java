@@ -25,4 +25,6 @@ public class Customer extends  AbstractEntity<Long>{
     private String contact;
 
     private String code;
+
+
 }

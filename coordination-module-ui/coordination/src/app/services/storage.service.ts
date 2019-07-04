@@ -8,7 +8,8 @@ const LAST_DATE = 'LAST_DATE';
 const TASK = 'TASK';
 const HOURS_FOR_TASK = 'HOURS_FOR_TASK';
 const DESCRIPTION_TASK = 'DESCRIPTION_TASK';
-
+const SHOW_FOR = 'SHOW_FOR';
+const MONTH = 'MONTH';
 
 
 @Injectable({
@@ -17,13 +18,12 @@ const DESCRIPTION_TASK = 'DESCRIPTION_TASK';
 export class StorageService {
 
   constructor() { 
-   this.init();
+   //this.init();
    }
 
   clearFilter() {
     sessionStorage.clear();
   }
-
   
   public init(){
     this.setReportType('');
@@ -33,7 +33,9 @@ export class StorageService {
     this.setHoursForTask('');
     this.setLastDate('');
     this.setProjectId('');
-    this.setTask('');     
+    this.setTask('');    
+    this.setShowFor('today'); 
+    this.setMonth((new Date().getMonth() + 1).toString())  
   }
 
   public setReportType(field: string) {
@@ -43,6 +45,15 @@ export class StorageService {
 
   public getReportType(): string {
     return sessionStorage.getItem(REPORT_TYPE);
+  }
+
+  public setMonth(field: string) {
+    window.sessionStorage.removeItem(MONTH);
+    window.sessionStorage.setItem(MONTH, field);
+  }
+
+  public getMonth(): string {
+    return sessionStorage.getItem(MONTH);
   }
 
   public setProjectId(field: string) {
@@ -106,6 +117,15 @@ export class StorageService {
 
   public getDescriptionTask(): string {
     return sessionStorage.getItem(DESCRIPTION_TASK);
+  }
+
+  public setShowFor(field: string) {
+    window.sessionStorage.removeItem(SHOW_FOR);
+    window.sessionStorage.setItem(SHOW_FOR, field);
+  }
+
+  public getShowFor(): string {
+    return sessionStorage.getItem(SHOW_FOR);
   }
 
 }

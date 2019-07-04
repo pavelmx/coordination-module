@@ -1,5 +1,5 @@
 <div>
-  <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addModal">Create </button>
+  <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addModal">Assign to project </button>
 </div>
 
 <table class="table table-striped mt-5">
@@ -10,44 +10,34 @@
           [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.firstName" (sort)="onSort($event)">Name
+      <th scope="col" class="sortable" sortable="project.name" (sort)="onSort($event)">Project
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.firstName', 'caret-up':order=='asc' && column=='personalInfo.firstName'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='project.name', 'caret-up':order=='asc' && column=='project.name'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">EmployeeId
+      <th scope="col" class="sortable" sortable="projectPositionEmployee.employeeId" (sort)="onSort($event)">EmployeeId
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='projectPositionEmployee.employeeId', 'caret-up':order=='asc' && column=='projectPositionEmployee.employeeId'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.skype" (sort)="onSort($event)">Position
+      <th scope="col" class="sortable" sortable="projectPositionEmployee.position" (sort)="onSort($event)">Position
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.skype', 'caret-up':order=='asc' && column=='personalInfo.skype'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='projectPositionEmployee.position', 'caret-up':order=='asc' && column=='projectPositionEmployee.position'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.email" (sort)="onSort($event)">Rate
+      <th scope="col" class="sortable" sortable="projectPositionEmployee.rate" (sort)="onSort($event)">Rate
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.email', 'caret-up':order=='asc' && column=='personalInfo.email'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='projectPositionEmployee.rate', 'caret-up':order=='asc' && column=='projectPositionEmployee.rate'}">
+        </span>
+      </th>       
+      <th scope="col" class="sortable" sortable="plannedStartDate" (sort)="onSort($event)">Planned period
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='plannedStartDate', 'caret-up':order=='asc' && column=='plannedStartDate'}">
         </span>
       </th>
-      <!-- <th scope="col" class="sortable" sortable="personalInfo.phoneNumber" (sort)="onSort($event)">Start date
+      <th scope="col" class="sortable" sortable="startDate" (sort)="onSort($event)">Actual period
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.phoneNumber', 'caret-up':order=='asc' && column=='personalInfo.phoneNumber'}">
-        </span>
-      </th>
-      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">End date
-        <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
-        </span>
-      </th> -->
-      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Planned period
-        <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
-        </span>
-      </th>
-      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Actual period
-        <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='startDate', 'caret-up':order=='asc' && column=='startDate'}">
         </span>
       </th>
       <th scope="col">Status</th>
@@ -58,29 +48,28 @@
     <tr *ngFor="let projectPosition of list">
       <th>{{projectPosition.id}}</th>
       <td>{{projectPosition.project.name}}</td>
-      <td>{{projectPosition.projectPositionEmployee.employeeId}}</td>
+      <td>{{projectPosition.projectPositionEmployee.employeeId}}
+          <div *ngIf="!projectPosition.project.startDate">
+              <h6 >
+                  <span class="badge badge-warning">Project not running</span></h6>
+          </div>
+          <div class="" *ngIf="projectPosition.project.startDate">
+              
+                <h6 *ngIf="projectPosition.endDate && projectPosition.startDate">
+                  <span class="badge badge-danger">Finished</span></h6>
+                <h6 *ngIf="!projectPosition.endDate && !projectPosition.startDate">
+                  <span class="badge badge-info">Not started</span></h6>
+                <h6 *ngIf="!projectPosition.endDate && projectPosition.startDate">
+                  <span class="badge badge-success">Working</span></h6>
+            </div>
+      </td>
       <td>{{projectPosition.projectPositionEmployee.position}}</td>
       <td>{{projectPosition.projectPositionEmployee.rate}}</td>
       <td>{{projectPosition.plannedStartDate}} -- {{projectPosition.plannedEndDate}}</td>
       <td *ngIf="!projectPosition.endDate && projectPosition.startDate">{{projectPosition.startDate}} -- (now)</td>
       <td *ngIf="projectPosition.endDate || !projectPosition.startDate && !projectPosition.endDate">
         {{projectPosition.startDate}} -- {{projectPosition.endDate}}</td>
-      <td>
-        <div *ngIf="!projectPosition.project.startDate">
-            <h4 >
-                <span class="badge badge-warning">Project not running</span></h4>
-        </div>
-        <div *ngIf="projectPosition.project.startDate">
-            
-              <h4 *ngIf="projectPosition.endDate && projectPosition.startDate">
-                <span class="badge badge-danger">Finished</span></h4>
-              <h4 *ngIf="!projectPosition.endDate && !projectPosition.startDate">
-                <span class="badge badge-info">Not started</span></h4>
-              <h4 *ngIf="!projectPosition.endDate && projectPosition.startDate">
-                <span class="badge badge-success">Working</span></h4>
-          </div>
-        
-      </td>
+      
       <td *ngIf="projectPosition.project.startDate">
         <button *ngIf="!projectPosition.startDate && !projectPosition.endDate" class="btn btn-outline-primary"
           (click)="startProjectPosition(projectPosition.id)">Start</button>
@@ -91,8 +80,12 @@
   </tbody>
 </table>
 
+<!-- pagination -->
+<ngb-pagination (pageChange)="onPageChange($event)" [collectionSize]="length" [(page)]="page" [pageSize]="size"
+    [maxSize]="10" [rotate]="true" [boundaryLinks]="true">
+  </ngb-pagination>
 
-<!-- add modal -->
+<!-- assign to project modal -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -108,13 +101,13 @@
           <div class="form-group">
             <div class="row">
               <div class="col ">
-                <label>Choose project</label>
-                <select required class="custom-select" name="project" [(ngModel)]="projectPosition.project"
-                  #project="ngModel">
-                  <option *ngFor="let p of projectList" [ngValue]="p">{{p.name}}
-                  </option>
-                </select>
+                <label>Choose project</label>                
+                <input id="typeahead-config" type="text" class="form-control" [(ngModel)]="projectPosition.project"
+                [inputFormatter]="formatterProject" [resultFormatter]="formatterProject" [ngbTypeahead]="searchProject"
+                name="project" #project="ngModel" required placeholder="Enter project name"
+                [ngClass]="{'is-valid':project.valid && project.touched,'is-invalid':project.invalid && project.touched}"/>    
               </div>
+              <h6 class="d-flex align-items-end">OR</h6>
               <div class="col-4 d-flex align-content-end flex-wrap">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" routerLink="/project-list"
                   data-toggle="modal" data-target="#addModal">Create project</button>
@@ -125,12 +118,10 @@
 
           <div class="form-group">
             <label>Choose employee</label>
-            <select required class="custom-select" name="employeeId" [(ngModel)]="projectPositionEmployee.employeeId"
-              #employeeId="ngModel">
-              <option *ngFor="let emp of activeEmployeeList" [ngValue]="emp.id">
-                {{emp.personalInfo.firstName}} {{emp.personalInfo.lastName}}
-              </option>
-            </select>
+            <input required id="typeahead-config" type="text" class="form-control" [(ngModel)]="projectPositionEmployee.employeeId"
+                [inputFormatter]="formatterEmployee" [resultFormatter]="formatterEmployee" [ngbTypeahead]="searchEmployee"
+                name="employeeId" #employeeId="ngModel" placeholder="Enter employee first or last name"
+                [ngClass]="{'is-valid':employeeId.valid && employeeId.touched,'is-invalid':employeeId.invalid && employeeId.touched}"/>    
           </div>
 
 
@@ -156,7 +147,8 @@
               <div class="col">
                 <input required type="date" class="form-control" placeholder="Planned end date" name="plannedEndDate"
                   [(ngModel)]="projectPosition.plannedEndDate" #plannedEndDate="ngModel"
-                  [ngClass]="{'is-valid':plannedEndDate.valid && plannedEndDate.touched,'is-invalid':plannedEndDate.invalid && plannedEndDate.touched}">
+                  [ngClass]="{'is-valid':plannedEndDate.valid && plannedEndDate.touched,'is-invalid':plannedEndDate.invalid && plannedEndDate.touched}"
+                  min="{{projectPosition.plannedStartDate}}" [disabled]="!projectPosition.plannedStartDate">
               </div>
             </div>
           </div>

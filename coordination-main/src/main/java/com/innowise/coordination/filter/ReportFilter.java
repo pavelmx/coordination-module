@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class ReportFilter {
-
     private String descriptionTask;
     private String employeeId;
     private String firstDate;
@@ -13,4 +12,6 @@ public class ReportFilter {
     private String task;
     private String reportType;
     private String projectId;
+    private String showFor;
+    private String month;
 }

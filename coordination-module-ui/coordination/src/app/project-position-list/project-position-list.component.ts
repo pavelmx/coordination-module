@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ViewChildren, QueryList } from '@angular/core';
 import { ProjectPositionService } from '../services/project-position.service';
 import { ToastService } from '../services/toast.service';
 import { ProjectPosition } from '../models/project-position.model';
@@ -7,6 +7,9 @@ import { NgForm } from '@angular/forms';
 import { ProjectPositionEmployee } from '../models/project-position-employee.model';
 import { Project } from '../models/project.model';
 import { ProjectService } from '../services/project.service';
+import { Observable } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
+import { NgbdSortableHeader, SortEvent } from '../sortable.directive';
 
 @Component({
   selector: 'app-project-position-list',
@@ -21,9 +24,17 @@ export class ProjectPositionListComponent implements OnInit {
   employeeId: string;
   projectList: Project[];
   projectPosition: ProjectPosition = new ProjectPosition();
-  projectPositionEmployee: ProjectPositionEmployee = new ProjectPositionEmployee();
+  projectPositionEmployee: any = {}
+  page: number = 0;
+  size: number = 10;
+  column: string = 'id';
+  order: string = 'asc';
+  length: number;
+  lastPage: number;
 
-  @ViewChild('close_add') closeAddModal: ElementRef;
+  @ViewChild('close_add', {static: false}) closeAddModal: ElementRef;
+
+  @ViewChildren(NgbdSortableHeader) headers: QueryList<NgbdSortableHeader>;
 
   
   constructor( 
@@ -32,12 +43,55 @@ export class ProjectPositionListComponent implements OnInit {
     private toast: ToastService,
     private cookieService: CookieService) { }
 
+//////////////////////////////////////////////////
+    searchProject = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 1 ? []
+        : this.projectList.filter(v => v.name.toLowerCase().indexOf(term.toLowerCase()) > -1).splice(0, 10))
+    )
+    formatterProject = (x : Project) => x.name;
+
+    searchEmployee = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 1 ? []
+        : this.activeEmployeeList.filter((data) => this.matchValue(data.personalInfo, term)).splice(0, 10))
+        )
+    formatterEmployee = (x : {id: number, personalInfo : {firstName: string, lastName: string}}) => x.personalInfo.firstName + " " + x.personalInfo.lastName;
+    matchValue(data, value) {
+      return Object.keys(data).map((key) => {
+         return new RegExp(value, 'gi').test(data[key]);
+      }).some(result => result);
+    }
+    ////////////////////////////////////////////  
+
+    onPageChange(pageNumber){   
+      this.page = pageNumber-1;   
+      this.initProjectPositionList(); 
+      
+    }
+
+    onSort({column, direction}: SortEvent) {
+      this.headers.forEach(header => {
+        if (header.sortable !== column) {
+          header.direction = '';
+        }
+      });
+      this.page = 0;
+      this.column = column;
+      this.order = direction;      
+      this.initProjectPositionList();
+    }
+
   ngOnInit() {
     this.initProjectPositionList();
     this.getProjectList();
     this.getEmployeeList();
   }
-
+  
   getEmployeeId(){
     this.cookieService.set('employeeId' , '1');
     this.employeeId = this.cookieService.get('employeeId');
@@ -45,10 +99,12 @@ export class ProjectPositionListComponent implements OnInit {
 
   initProjectPositionList() {  
     this.getEmployeeId() 
-    this.projectPositionService.getAllByEmployeeId(this.employeeId)
+    this.projectPositionService.getPageByEmployeeId(this.employeeId, this.page, this.size, this.column, this.order)
       .subscribe(
         response => {
-          this.list = response;
+          this.list = response['content'];
+          this.length = response['totalElements'];
+          this.lastPage = response['totalPages']; 
           console.log(response); 
         },
         error => {
@@ -58,7 +114,7 @@ export class ProjectPositionListComponent implements OnInit {
   }
 
   getProjectList(){
-    this.projectService.getAll()
+    this.projectService.getAllActive()
     .subscribe(
       response => {
         this.projectList = response;
@@ -84,9 +140,10 @@ export class ProjectPositionListComponent implements OnInit {
   }
 
   createProjectPosition(form: NgForm){
+    this.projectPosition.projectPositionEmployee = this.projectPositionEmployee;
+    this.projectPosition.projectPositionEmployee.employeeId = this.projectPositionEmployee.employeeId.id;
     console.log(this.projectPosition)
     console.log(this.projectPositionEmployee)
-    this.projectPosition.projectPositionEmployee = this.projectPositionEmployee;
     this.projectPositionService.createProjectPosition(this.projectPosition)
     .subscribe(
       response => {

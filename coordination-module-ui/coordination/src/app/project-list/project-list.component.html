@@ -1,95 +1,93 @@
 <div>
-  <button class="btn btn-outline-primary" 
-  data-toggle="modal" data-target="#addModal">Create project</button>
+  <button class="btn btn-outline-primary" data-toggle="modal" data-target="#addModal"
+  (click)="newProject()" >Create project</button>
 </div>
 
 <table class="table table-striped mt-5">
   <thead>
     <tr>
       <th scope="col" class="sortable" sortable="id" (sort)="onSort($event)">Id
-        <span class="caret-blank"
+        <span class="caret-blank "
           [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.firstName" (sort)="onSort($event)">Name
+      <th scope="col" class="sortable" sortable="name" (sort)="onSort($event)">Project name
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.firstName', 'caret-up':order=='asc' && column=='personalInfo.firstName'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='name', 'caret-up':order=='asc' && column=='name'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Model
+       <!-- <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Model
         <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
         </span>
-      </th>
-      <th scope="col" class="sortable" sortable="personalInfo.skype" (sort)="onSort($event)">Code
+      </th>  -->
+      <th scope="col" class="sortable" sortable="code" (sort)="onSort($event)">Code
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.skype', 'caret-up':order=='asc' && column=='personalInfo.skype'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='code', 'caret-up':order=='asc' && column=='code'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.email" (sort)="onSort($event)">Hours for project
+      <th scope="col" class="sortable" sortable="hoursForProject" (sort)="onSort($event)">Hours for project
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.email', 'caret-up':order=='asc' && column=='personalInfo.email'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='hoursForProject', 'caret-up':order=='asc' && column=='hoursForProject'}">
         </span>
       </th>
-      <!-- <th scope="col" class="sortable" sortable="personalInfo.phoneNumber" (sort)="onSort($event)">Start date
-          <span class="caret-blank"
-            [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.phoneNumber', 'caret-up':order=='asc' && column=='personalInfo.phoneNumber'}">
-          </span>
-        </th>
-        <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">End date
-          <span class="caret-blank"
-            [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
-          </span>
-        </th> -->
-      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Planned period
+      <!--  -->
+      <th scope="col" class="sortable" sortable="plannedStartDate" (sort)="onSort($event)">Planned period
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='plannedStartDate', 'caret-up':order=='asc' && column=='plannedStartDate'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Actual period
+      <th scope="col" class="sortable" sortable="startDate" (sort)="onSort($event)">Actual period
+        <span class="caret-blank"
+          [ngClass]="{'caret-down':order=='desc' && column=='startDate', 'caret-up':order=='asc' && column=='startDate'}">
+        </span>
+      </th>
+       <!-- <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Customer
         <span class="caret-blank"
           [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
         </span>
-      </th>
-      <th scope="col" class="sortable" sortable="isActive" (sort)="onSort($event)">Customer
-        <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='isActive', 'caret-up':order=='asc' && column=='isActive'}">
-        </span>
-      </th>
-      <th scope="col">Status</th>
+      </th>  -->
+      <th scope="col"></th>
       <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let project of list">
       <th>{{project.id}}</th>
-      <td>{{project.name}}</td>
-      <td>{{project.model}}</td>
+      <td>{{project.name}}
+        <h6 *ngIf="project.endDate && project.startDate">
+          <span class="badge badge-danger">Finished</span></h6>
+        <h6 *ngIf="!project.endDate && !project.startDate">
+          <span class="badge badge-info">Not started</span></h6>
+        <h6 *ngIf="!project.endDate && project.startDate">
+          <span class="badge badge-success">In progress</span></h6>
+      </td>
+      <!-- <td>{{project.model}}</td> -->
       <td>{{project.code}}</td>
       <td>{{project.hoursForProject}}</td>
       <td>{{project.plannedStartDate}} -- {{project.plannedEndDate}}</td>
       <td *ngIf="!project.endDate && project.startDate">{{project.startDate}} -- (now)</td>
-      <td *ngIf="project.endDate || !project.startDate && !project.endDate">{{project.startDate}} -- {{project.endDate}}</td>
-      <td>{{project.customer.name}}</td>
-      <td>
-        <h4 *ngIf="project.endDate && project.startDate">
-          <span class="badge badge-danger">Finished</span></h4>
-        <h4 *ngIf="!project.endDate && !project.startDate">
-          <span class="badge badge-info">Not started</span></h4>
-        <h4 *ngIf="!project.endDate && project.startDate">
-          <span class="badge badge-success">In progress</span></h4>
+      <td *ngIf="project.endDate || !project.startDate && !project.endDate">{{project.startDate}} -- {{project.endDate}}
       </td>
-      <td>
+      <!-- <td>{{project.customer.name}}</td>       -->
+      <td style="width: 50px">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#infoProject"
+          (click)="infoAboutProject(project)">Info</button>
+      </td>
+      <td style="width: 50px">
         <button *ngIf="!project.startDate && !project.endDate" class="btn btn-outline-primary"
           (click)="startProject(project.id)">Start</button>
         <button *ngIf="project.startDate && !project.endDate" class="btn btn-outline-danger"
           (click)="endProject(project.id)">End</button>
-        
       </td>
     </tr>
   </tbody>
 </table>
 
+<!-- pagination -->
+<ngb-pagination (pageChange)="onPageChange($event)" [collectionSize]="length" [(page)]="page" [pageSize]="size"
+    [maxSize]="10" [rotate]="true" [boundaryLinks]="true">
+  </ngb-pagination>
 
 <!-- add project -->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -134,24 +132,25 @@
               </div>
               <div class="col">
                 <input required type="date" class="form-control" placeholder="Planned end date" name="plannedEndDate"
-                  [(ngModel)]="project.plannedEndDate" #plannedEndDate="ngModel"
-                  [ngClass]="{'is-valid':plannedEndDate.valid && plannedEndDate.touched,'is-invalid':plannedEndDate.invalid && plannedEndDate.touched}">
+                  [(ngModel)]="project.plannedEndDate" #plannedEndDate="ngModel" [disabled]="!project.plannedStartDate"
+                  [ngClass]="{'is-valid':plannedEndDate.valid && plannedEndDate.touched,'is-invalid':plannedEndDate.invalid && plannedEndDate.touched}"
+                  min="{{project.plannedStartDate}}">
               </div>
             </div>
           </div>
           <div class="form-group">
             <div class="row">
-              <div class="col ">
+              <div class="col">
                 <label>Choose customer</label>
-                <select required class="custom-select" name="customerProject" [(ngModel)]="project.customer"
-                  #customerProject="ngModel">
-                  <option *ngFor="let c of customerList" [ngValue]="c">{{c.name}}
-                  </option>
-                </select>
+                <input id="typeahead-config" type="text" class="form-control" [(ngModel)]="project.customer"
+                  [inputFormatter]="formatter" [resultFormatter]="formatter" [ngbTypeahead]="search"
+                  name="customerProject" #customerProject="ngModel" required
+                  [ngClass]="{'is-valid':customerProject.valid && customerProject.touched,'is-invalid':customerProject.invalid && customerProject.touched}"/>
               </div>
+              <h6 class="d-flex align-items-end">OR</h6>
               <div class="col-4 d-flex align-content-end flex-wrap">
-                <button type="button" class="btn btn-primary"
-                data-toggle="modal" data-target="#addCustomerModal">Add customer</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" 
+                data-target="#addCustomerModal">Create    customer</button>
               </div>
             </div>
           </div>
@@ -166,7 +165,7 @@
   </div>
 </div>
 
-<!-- add customer -->
+<!-- create customer -->
 <div class="modal fade" id="addCustomerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
   aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -181,27 +180,131 @@
       <div class="modal-body">
         <form #fc="ngForm">
           <div class="form-group">
-            <input required type="text" class="form-control" placeholder="Name" name="nameCustomer" [(ngModel)]="customer.name"
-              #nameCustomer="ngModel"
+            <input required type="text" class="form-control" placeholder="Name" name="nameCustomer"
+              [(ngModel)]="customer.name" #nameCustomer="ngModel"
               [ngClass]="{'is-valid':nameCustomer.valid && nameCustomer.touched,'is-invalid':nameCustomer.invalid && nameCustomer.touched}">
           </div>
           <div class="form-group">
-            <input required type="text" class="form-control" placeholder="Contact" name="contact" [(ngModel)]="customer.contact"
-              #contact="ngModel"
+            <input required type="text" class="form-control" placeholder="Contact" name="contact"
+              [(ngModel)]="customer.contact" #contact="ngModel"
               [ngClass]="{'is-valid':contact.valid && contact.touched,'is-invalid':contact.invalid && contact.touched}">
           </div>
           <div class="form-group">
-            <input required type="text" class="form-control" placeholder="Code" name="codeCustomer" [(ngModel)]="customer.code"
-              #codeCustomer="ngModel"
+            <input required type="text" class="form-control" placeholder="Code" name="codeCustomer"
+              [(ngModel)]="customer.code" #codeCustomer="ngModel"
               [ngClass]="{'is-valid':codeCustomer.valid && codeCustomer.touched,'is-invalid':codeCustomer.invalid && codeCustomer.touched}">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="fc.resetForm()">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="fc.form.invalid" (click)="createCustomer(fc)">Save</button>
+        <button type="button" class="btn btn-primary" [disabled]="fc.form.invalid"
+          (click)="createCustomer(fc)">Save</button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- info (edit) -->
+<div class="modal fade bd-example-modal-lg" id="infoProject" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg " role="document">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalCenterTitle">Info about project</h5>
+        <button type="button" class="close" data-dismiss="modal"  aria-label="Close" #info>
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #fi="ngForm">
+          <div class="row">
+            <div class="col">
+              <div class="form-group">
+                <label for="">Project name</label>
+                <input required type="text" class="form-control" placeholder="Name" name="nameinfo"
+                  [(ngModel)]="project.name" #nameinfo="ngModel"
+                  [ngClass]="{'is-valid':name.valid ,'is-invalid':name.invalid }">
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label>Project model</label>
+                <input required type="text" class="form-control" placeholder="Model" name="modelinfo"
+                  [(ngModel)]="project.model" #modelinfo="ngModel"
+                  [ngClass]="{'is-valid':model.valid ,'is-invalid':model.invalid}">
+              </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                  <label>Customer</label>
+                  <input id="typeahead-config" type="text" class="form-control" [(ngModel)]="project.customer"
+                  [inputFormatter]="formatter" [resultFormatter]="formatter" [ngbTypeahead]="search"
+                  name="customerInfo" #customerInfo="ngModel" required
+                  [ngClass]="{'is-valid':customerInfo.valid ,'is-invalid':customerInfo.invalid }"/>
+                </div>
+              </div>
+          </div>
+          <div class="row">
+            <div class="col-3">
+              <div class="form-group">
+                <label>Project code</label>
+                <input required type="text" class="form-control" placeholder="Code" name="codeinfo"
+                  [(ngModel)]="project.code" #codeinfo="ngModel"
+                  [ngClass]="{'is-valid':code.valid ,'is-invalid':code.invalid}">
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="form-group">
+                <label for="">Hours</label>
+                <input required type="number" class="form-control" placeholder="Hours for project"
+                  name="hoursForProjectinfo" [(ngModel)]="project.hoursForProject" #hoursForProjectinfo="ngModel"
+                  [ngClass]="{'is-valid':hoursForProject.valid ,'is-invalid':hoursForProject.invalid}">
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label>Planned period for project work</label> 
+                <div class="row">  
+                  <div class="col">        
+                    <input style="width: 200px" required type="date" class="form-control" placeholder="Planned start date"
+                      name="plannedStartDateinfo" [(ngModel)]="project.plannedStartDate" #plannedStartDateinfo="ngModel"
+                      [ngClass]="{'is-valid':plannedStartDate.valid ,'is-invalid':plannedStartDate.invalid }">
+                    </div>  <div class="col">
+                    <input style="width: 200px" required type="date" class="form-control" placeholder="Planned end date"
+                      name="plannedEndDateinfo" [(ngModel)]="project.plannedEndDate" #plannedEndDateinfo="ngModel"
+                      [disabled]="!project.plannedStartDate"
+                      [ngClass]="{'is-valid':plannedEndDate.valid ,'is-invalid':plannedEndDate.invalid }"
+                      min="{{project.plannedStartDate}}">
+                    </div>    </div>        
+              </div>
+            </div>
+          </div>
+        </form>
+        <h5 class="mt-3">Project staff</h5>
+        <table class="table ">
+          <thead>
+            <tr>
+              <th scope="col">EmployeeId</th>
+              <th scope="col">Position</th>
+              <th scope="col">Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let emp of employeeList">
+              <td>{{emp.employeeId}}</td>
+              <td>{{emp.position}}</td>
+              <td>{{emp.rate}}</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+        <button type="button" class="btn btn-primary" [disabled]="fi.form.invalid"
+          (click)="editProject()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>

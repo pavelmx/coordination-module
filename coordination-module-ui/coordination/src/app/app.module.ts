@@ -14,8 +14,8 @@ import { CustomerListComponent } from './customer-list/customer-list.component';
 import { CustomerService } from './services/customer.service';
 import { ReportService } from './services/report.service';
 import { ReportListComponent } from './report-list/report-list.component';
-
-
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbdSortableHeader } from './sortable.directive';
 
 @NgModule({
   declarations: [
@@ -26,9 +26,11 @@ import { ReportListComponent } from './report-list/report-list.component';
     ProjectPositionListComponent,
     CustomerListComponent,
     ReportListComponent,
+    NgbdSortableHeader
     
   ],
   imports: [
+    NgbModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,

@@ -12,4 +12,7 @@ public interface ProjectRepository extends AbstractRepository<Project, Long, QPr
     List<Project> findByCustomerId(Long id);
 
     List<Project> findByStartDateNotNullAndEndDateNull();
+
+    boolean existsByCode(String code);
+
 }

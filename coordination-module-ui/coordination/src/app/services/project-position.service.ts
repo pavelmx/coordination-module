@@ -25,8 +25,18 @@ export class ProjectPositionService {
     return this.http.get<ProjectPosition[]>(this.url + "employee?id=" + id );
   }
 
+  getPageByEmployeeId(id: string, page: number, size: number, column: string, order: string,): Observable<ProjectPosition[]>{
+    return this.http.get<ProjectPosition[]>(this.url + "page/employee?size=" + size + "&page=" 
+    + page + "&column=" + column + "&order=" + order + "&id=" + id);
+  }
+
   getAll() : Observable<ProjectPosition[]>{
     return this.http.get<ProjectPosition[]>(this.url + "all");
+  }
+
+  getPage(page: number, size: number, column: string, order: string) : Observable<ProjectPosition[]>{
+    return this.http.get<ProjectPosition[]>(this.url + "page?size=" + size + "&page=" 
+    + page + "&column=" + column + "&order=" + order);
   }
 
   getActiveEmployees(){
@@ -48,4 +58,6 @@ export class ProjectPositionService {
   endProjectPosition(id: number): Observable<string>{
     return this.http.get<string>(this.url + "end?id=" + id);
   }
+
+  
 }

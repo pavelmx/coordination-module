@@ -7,23 +7,23 @@
           [ngClass]="{'caret-down':order=='desc' && column=='id', 'caret-up':order=='asc' && column=='id'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.firstName" (sort)="onSort($event)">Name
+      <th scope="col" class="sortable" sortable="name" (sort)="onSort($event)">Name
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.firstName', 'caret-up':order=='asc' && column=='personalInfo.firstName'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='name', 'caret-up':order=='asc' && column=='name'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Contact
+      <th scope="col" class="sortable" sortable="contact" (sort)="onSort($event)">Contact
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='contact', 'caret-up':order=='asc' && column=='contact'}">
         </span>
       </th>
-      <th scope="col" class="sortable" sortable="personalInfo.lastName" (sort)="onSort($event)">Code
+      <th scope="col" class="sortable" sortable="code" (sort)="onSort($event)">Code
         <span class="caret-blank"
-          [ngClass]="{'caret-down':order=='desc' && column=='personalInfo.lastName', 'caret-up':order=='asc' && column=='personalInfo.lastName'}">
+          [ngClass]="{'caret-down':order=='desc' && column=='code', 'caret-up':order=='asc' && column=='code'}">
         </span>
       </th>
       
-      <!-- <th scope="col">Operations</th> -->
+      <th scope="col"></th>
     </tr>
   </thead>
   <tbody>
@@ -32,8 +32,54 @@
       <td>{{customer.name}}</td>
       <td>{{customer.contact}}</td>
       <td>{{customer.code}}</td>
-     
-      
+     <td style="width: 50px">
+      <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter"
+      (click)="setEditCustomer(customer)">Edit</button>
+     </td>
     </tr>
   </tbody>
 </table>
+
+<!-- pagination -->
+<ngb-pagination (pageChange)="onPageChange($event)" [collectionSize]="length" [(page)]="page" [pageSize]="size"
+    [maxSize]="10" [rotate]="true" [boundaryLinks]="true">
+  </ngb-pagination>
+
+
+    
+  <!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+          <button #close type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <form #f="ngForm">
+                <div class="form-group">
+                  <input required type="text" class="form-control" placeholder="Name" name="nameCustomer"
+                    [(ngModel)]="customerEdit.name" #nameCustomer="ngModel"
+                    [ngClass]="{'is-valid':nameCustomer.valid ,'is-invalid':nameCustomer.invalid }">
+                </div>
+                <div class="form-group">
+                  <input required type="text" class="form-control" placeholder="Contact" name="contact"
+                    [(ngModel)]="customerEdit.contact" #contact="ngModel"
+                    [ngClass]="{'is-valid':contact.valid ,'is-invalid':contact.invalid }">
+                </div>
+                <div class="form-group">
+                  <input required type="text" class="form-control" placeholder="Code" name="codeCustomer"
+                    [(ngModel)]="customerEdit.code" #codeCustomer="ngModel"
+                    [ngClass]="{'is-valid':codeCustomer.valid ,'is-invalid':codeCustomer.invalid }">
+                </div>
+              </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" >Close</button>
+          <button type="button" class="btn btn-primary" (click)="edit(f)" [disabled]="f.form.invalid">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>

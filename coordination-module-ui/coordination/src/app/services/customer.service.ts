@@ -25,7 +25,16 @@ export class CustomerService {
     return this.http.get<Customer[]>(this.url + "all");
   }
 
+  getPage(page: number, size: number, column: string, order: string) : Observable<Customer[]>{
+    return this.http.get<Customer[]>(this.url + "page?size=" + size + "&page=" 
+    + page + "&column=" + column + "&order=" + order);
+  }
+
   createCustomer(customer: Customer) : Observable<Customer>{
     return this.http.post<Customer>(this.url, customer);
+  }
+
+  editCustomer(customer: Customer) : Observable<Customer>{
+    return this.http.put<Customer>(this.url, customer);
   }
 }

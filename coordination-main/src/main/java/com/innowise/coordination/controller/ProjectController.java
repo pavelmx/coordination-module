@@ -43,4 +43,6 @@ public class ProjectController extends AbstractController<Project, ProjectServic
         return ResponseEntity.ok(new Response(service.setEndProjectById(id)));
     }
 
+
+
 }

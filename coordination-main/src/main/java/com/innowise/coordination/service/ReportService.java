@@ -67,6 +67,13 @@ public class ReportService extends AbstractService<Report, ReportRepository, QRe
         }else if(!StringUtils.isEmpty(filter.getLastDate())){
             predicate.and(qReport.reportDate.before(LocalDate.parse(filter.getLastDate()).plusDays(1)));
         }
+        if (!StringUtils.isEmpty(filter.getShowFor())) {
+            if(filter.getShowFor().contentEquals("month")){
+                predicate.and(qReport.reportDate.month().eq(Integer.valueOf(filter.getMonth())));//current month
+            }else if(filter.getShowFor().contentEquals("today")) {
+                predicate.and(qReport.reportDate.eq(LocalDate.now()));
+            }
+        }
         return predicate;
     }
 }

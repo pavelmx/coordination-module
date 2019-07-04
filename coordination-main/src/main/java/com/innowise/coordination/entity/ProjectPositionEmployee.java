@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Data
@@ -27,4 +26,5 @@ public class ProjectPositionEmployee extends AbstractEntity<Long>{
     private String position;
 
     private Float rate;
+
 }

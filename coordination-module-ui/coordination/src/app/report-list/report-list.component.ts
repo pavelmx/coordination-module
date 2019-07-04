@@ -17,15 +17,16 @@ import { StorageService } from '../services/storage.service';
 })
 export class ReportListComponent implements OnInit {
 
-  list: Report[];
+  list: Report[] = [];
   projectList: Project[];
   newReport: Report = new Report();
   filter: any = {}
   statistics: any = {}
   reportBody: Report = new Report();
   isAdd: boolean = true;
-  today: string;
   employeeList;
+  today: Date;
+  editable: boolean;
 
   constructor(
     private reportService: ReportService,
@@ -41,9 +42,19 @@ export class ReportListComponent implements OnInit {
     this.initReportList();
     this.initProjectList();
     this.initEmployeeList();
+    this.checkEditReportForMonth();
   }
 
-  initFilter(){
+  checkEditReportForMonth() {
+    var curMonth = new Date().getMonth() + 1;
+    if (curMonth == this.filter.month) {
+      this.editable = true;
+    } else {
+      this.editable = false;
+    }
+  }
+
+  initFilter() {
     console.log("init filter")
     this.filter.descriptionTask = this.storage.getDescriptionTask();
     this.filter.employeeId = this.storage.getEmployeeId();
@@ -52,16 +63,27 @@ export class ReportListComponent implements OnInit {
     this.filter.lastDate = this.storage.getLastDate();
     this.filter.task = this.storage.getTask();
     this.filter.reportType = this.storage.getReportType();
-    this.filter.projectId = this.storage.getProjectId();  
+    this.filter.projectId = this.storage.getProjectId();
+    this.filter.showFor = this.storage.getShowFor();
+    this.filter.month = this.storage.getMonth();
   }
 
-  resetFilter(){
+  setCurrentMonth(){
+    var m = (new Date().getMonth() + 1).toString();
+    this.filter.month = m;
+    this.saveFilter();
+    this.checkEditReportForMonth();
+  }
+
+  resetFilter() {
     this.storage.init();
     this.initFilter();
     this.initReportList();
+    this.checkEditReportForMonth()
+    this.toast.showInfo("", "Filter reseted success")
   }
 
-  saveFilter(){    
+  saveFilter() {
     this.storage.setDescriptionTask(this.filter.descriptionTask);
     this.storage.setEmployeeId(this.filter.employeeId);
     this.storage.setFirstDate(this.filter.firstDate);
@@ -69,12 +91,14 @@ export class ReportListComponent implements OnInit {
     this.storage.setLastDate(this.filter.lastDate);
     this.storage.setTask(this.filter.task);
     this.storage.setReportType(this.filter.reportType);
-    this.storage.setProjectId(this.filter.projectId);    
+    this.storage.setProjectId(this.filter.projectId);
+    this.storage.setShowFor(this.filter.showFor);
+    this.storage.setMonth(this.filter.month);
     console.log(this.filter)
     this.initReportList();
   }
 
-  initEmployeeList(){
+  initEmployeeList() {
     this.projectPositionService.getActiveEmployees()
       .subscribe(
         response => {
@@ -101,36 +125,24 @@ export class ReportListComponent implements OnInit {
   }
 
   initReportList() {
-    console.log(this.filter) 
-      this.reportService.getAllFilter(this.filter)
-        .subscribe(
-          response => {
-            this.list = response;
-            console.log(response);
-            this.getStatistics()
-          },
-          error => {
-            console.log(error);
-          }
-        );
-    // } else if (this.filter.employee) {
-    //   this.reportService.getAllByEmployeeId(this.filter.employee)
-    //     .subscribe(
-    //       response => {
-    //         this.list = response;
-    //         console.log(response);
-    //         this.getStatistics()
-    //       },
-    //       error => {
-    //         console.log(error);
-    //       }
-    //     );
-    // }
+    console.log(this.filter)
+    //this.filter.employeeId = this.cookieService.get('employeeId'); //for user
+    this.reportService.getAllFilter(this.filter)
+      .subscribe(
+        response => {
+          this.list = response;
+          console.log(response);
+          this.getStatistics()
+        },
+        error => {
+          console.log(error);
+        }
+      );
   }
 
   getEmployeeById() {
-    var id = this.cookieService.get('employeeId'); //for users
-    // var id = this.filter.employee.id; //for admin
+    //var id = this.cookieService.get('employeeId'); //for users
+     var id = this.filter.employeeId; //for admin
     this.projectPositionService.getEmployeeById(id)
       .subscribe(
         response => {
@@ -144,42 +156,45 @@ export class ReportListComponent implements OnInit {
   }
 
   getStatistics() {
-    if (this.filter.employee) {
-      this.getEmployeeById();
-      var paidHours = '15';
-      var workingHoursInMonth = '168';
-      var workedHours = 0;
-    } else if(!this.filter.employee){
-      this.statistics.employee = 'all employees';
-      var paidHours = '--';
-      var workingHoursInMonth = '--';
-      var workedHours = 0;
-    }
+    if (this.list) {
+      if (this.filter.employeeId) {
+        this.getEmployeeById();
+        var paidHours = '--';
+        var workingHoursInMonth = '168';
+        var workedHours = 0;
+      } else if (!this.filter.employeeId) {
+        this.statistics.employee = 'all employees';
+        var paidHours = '--';
+        var workingHoursInMonth = '--';
+        var workedHours = 0;
+      }
 
-    var daysOnVacation = 0;
-    var daysOnSickLeave = 0;
+      var daysOnVacation = 0;
+      var daysOnSickLeave = 0;
 
-    for (var i = 0; i < this.list.length; i++) {
-      if (this.list[i].reportType == 'WORK') {
-        workedHours += this.list[i].hoursForTask;
+      for (var i = 0; i < this.list.length; i++) {
+        if (this.list[i].reportType == 'WORK') {
+          workedHours += this.list[i].hoursForTask;
+        }
+        if (this.list[i].reportType == 'SICK_LEAVE') {
+          daysOnSickLeave += 1;
+        }
+        if (this.list[i].reportType == 'VACATION') {
+          daysOnVacation += 1;
+        }
       }
-      if (this.list[i].reportType == 'SICK_LEAVE') {
-        daysOnSickLeave += 1;
-      }
-      if (this.list[i].reportType == 'VACATION') {
-        daysOnVacation += 1;
-      }
+      this.statistics.workedHours = workedHours;
+      this.statistics.workingHoursInMonth = workingHoursInMonth;
+      this.statistics.daysOnSickLeave = daysOnSickLeave;
+      this.statistics.paidHours = paidHours;
+      this.statistics.daysOnVacation = daysOnVacation;
     }
-    this.statistics.workedHours = workedHours;
-    this.statistics.workingHoursInMonth = workingHoursInMonth;
-    this.statistics.daysOnSickLeave = daysOnSickLeave;
-    this.statistics.paidHours = paidHours;
-    this.statistics.daysOnVacation = daysOnVacation;
   }
 
   getCurrentReport(report: Report) {
     this.isAdd = false;
     this.reportBody = report;
+    this.initReportList()
   }
 
   clearAddForm() {

@@ -35,7 +35,12 @@ implements  CommonService<E>{
 
     @Override
     public Page<E> getPage(int page, int size, String order, String column){
-        Pageable pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
+        Pageable pageable;
+        if (order.equals("")) {
+            pageable = PageRequest.of(page, size);
+        } else {
+            pageable = PageRequest.of(page, size, new Sort(Sort.Direction.fromString(order), column));
+        }
         return repository.findAll(pageable);
     }
 
