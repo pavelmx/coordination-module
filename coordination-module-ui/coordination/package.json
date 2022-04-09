@@ -21,7 +21,7 @@
     "@angular/router": "~7.2.0",
     "@ng-bootstrap/ng-bootstrap": "^5.0.0-rc.1",
     "core-js": "^2.5.4",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "ngx-cookie-service": "^2.1.0",
     "ngx-toastr": "^10.0.4",
     "rxjs": "~6.3.3",
